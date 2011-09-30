@@ -1,11 +1,12 @@
 @echo off
 
 if "%2" == "" (
-    echo.buildenv-python ^<python-path^> ^<compiler^> ^<arch^>
+    echo.buildenv-python ^<python-path^> ^<compiler^> ^<arch^> ^<folder^>
     echo.
     echo.  ^<python-path^> = path to directory containing python.exe
     echo.  ^<compiler^>    = msvc2008/sdk60/sdk70/mingw
     echo.  ^<arch^>        = 32/64
+    echo.  ^<folder^> = start folder, relative to %HOMEPATH%
     goto end
 )
 
@@ -91,4 +92,4 @@ exit
 
 :end
 %HOMEDRIVE%
-cd %HOMEPATH%\Documents
+cd %HOMEPATH%\%4
