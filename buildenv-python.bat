@@ -83,6 +83,12 @@ goto python
 echo.Setting Python Environment
 "%1\python.exe" -c "import sys; print(sys.version)"
 set PATH=%1;%1\Scripts;%PATH%
+goto blender
+
+:blender
+echo.Searching for Blender
+for /F "tokens=2* delims=	 " %%A in ('REG QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir') do set BLENDERHOME=%%B
+echo.Found Blender in %BLENDERHOME%
 goto end
 
 :error
