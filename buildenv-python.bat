@@ -86,9 +86,30 @@ set PATH=%1;%1\Scripts;%PATH%
 goto blender
 
 :blender
-echo.Searching for Blender
-for /F "tokens=2* delims=	 " %%A in ('REG QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir') do set BLENDERHOME=%%B
-echo.Found Blender in %BLENDERHOME%
+echo.Setting Blender Environment
+for /F "tokens=2* delims=	 " %%A in ('REG QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir') do (
+  set BLENDERHOME=%%B
+)
+if "%BLENDERHOME%" == "" (
+  echo.Blender not found
+  goto endblender
+)
+echo.Blender home: %BLENDERHOME%
+for %%A in (2.57,2.58,2.59) do (
+  if exist "%BLENDERHOME%\%%A" set BLENDERVERSION=%%A
+)
+if "%BLENDERVERSION%" == "" (
+  echo.Blender version not found
+  goto endblender
+)
+echo.Blender version: %BLENDERVERSION%
+if exist "%BLENDERHOME%\%BLENDERVERSION%\scripts\addons" set BLENDERADDONS=%BLENDERHOME%\%BLENDERVERSION%\scripts\addons
+if "%BLENDERADDONS%" == "" (
+  echo.Blender addons not found
+  goto endblender
+)
+echo.Blender addons: %BLENDERADDONS%
+:endblender
 goto end
 
 :error
