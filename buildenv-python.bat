@@ -6,7 +6,7 @@ if "%2" == "" (
     echo.  ^<python-path^> = path to directory containing python.exe
     echo.  ^<compiler^>    = msvc2008/sdk60/sdk70/mingw
     echo.  ^<arch^>        = 32/64
-    echo.  ^<folder^> = start folder, relative to %HOMEPATH%
+    echo.  ^<folder^>      = start folder, relative to %HOMEPATH%
     goto end
 )
 
