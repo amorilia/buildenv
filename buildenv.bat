@@ -4,16 +4,17 @@ if "%2" == "" (
     echo.buildenv.bat ^<python-path^> ^<compiler^> ^<arch^> ^<folder^>
     echo.
     echo.  ^<python-path^> = path to directory containing python.exe
-    echo.  ^<compiler^>    = msvc2008/sdk60/sdk70/mingw
+    echo.  ^<compiler^>    = msvc2008/mingw
     echo.  ^<arch^>        = 32/64
     echo.  ^<folder^>      = start folder, relative to %HOMEPATH%
     goto end
 )
 
 if "%2" == "msvc2008" goto msvc2008
+if "%2" == "mingw" goto mingw
+rem sdk60 and sdk70 are no longer documented but could still be useful
 if "%2" == "sdk60" goto sdk60
 if "%2" == "sdk70" goto sdk70
-if "%2" == "mingw" goto mingw
 goto error
 
 :msvc2008
@@ -95,7 +96,7 @@ if "%BLENDERHOME%" == "" (
   goto endblender
 )
 echo.Blender home: %BLENDERHOME%
-for %%A in (2.57,2.58,2.59) do (
+for %%A in (2.59,2.58,2.57) do (
   if exist "%BLENDERHOME%\%%A" set BLENDERVERSION=%%A
 )
 if "%BLENDERVERSION%" == "" (
