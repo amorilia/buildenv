@@ -1,7 +1,7 @@
 @echo off
 
 if "%2" == "" (
-    echo.buildenv-python ^<python-path^> ^<compiler^> ^<arch^> ^<folder^>
+    echo.buildenv.bat ^<python-path^> ^<compiler^> ^<arch^> ^<folder^>
     echo.
     echo.  ^<python-path^> = path to directory containing python.exe
     echo.  ^<compiler^>    = msvc2008/sdk60/sdk70/mingw
