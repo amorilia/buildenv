@@ -10,6 +10,10 @@ if "%2" == "" (
     goto end
 )
 
+rem get the 32-bit program files folder
+set ProgramFiles32=%ProgramFiles%
+if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
+
 if "%2" == "msvc2008" goto msvc2008
 if "%2" == "mingw" goto mingw
 rem sdk60 and sdk70 are no longer documented but could still be useful
@@ -33,11 +37,11 @@ if "%3" == "64" goto sdk70_64
 goto error
 
 :msvc2008_32
-call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
+call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
 goto python_msvc
 
 :msvc2008_64
-call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat"
+call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat"
 goto python_msvc
 
 :sdk60_32
