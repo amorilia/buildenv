@@ -100,7 +100,7 @@ if "%BLENDERHOME%" == "" (
   goto endblender
 )
 echo.Blender home: %BLENDERHOME%
-for %%A in (2.59,2.58,2.57) do (
+for %%A in (2.60,2.59,2.58,2.57) do (
   if exist "%BLENDERHOME%\%%A" set BLENDERVERSION=%%A
 )
 if "%BLENDERVERSION%" == "" (
