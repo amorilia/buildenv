@@ -38,6 +38,8 @@ The batch script does the following:
 * Update *PATH* for the specified version of Python.
 * Update *PATH*, *INCLUDE*, and *LIB* for the specified compiler.
 * Update Python's ``distutils.cfg`` to use the specified compiler.
+* Set *PYTHONFOLDER* to the folder where the specified version of
+  Python resides.
 * Set *BLENDERHOME*, *BLENDERVERSION*, and *BLENDERADDONS* according
   to whatever version of Blender is found via the registry.
 

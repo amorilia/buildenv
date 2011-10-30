@@ -88,6 +88,8 @@ goto python
 echo.Setting Python Environment
 "%1\python.exe" -c "import sys; print(sys.version)"
 set PATH=%1;%1\Scripts;%PATH%
+rem PYTHONPATH has another purpose
+set PYTHONFOLDER=%1
 goto blender
 
 :blender
