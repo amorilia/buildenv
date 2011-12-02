@@ -10,6 +10,7 @@ Right-click on the ``buildenv.bat`` file,
 and select **Send to > Desktop (create shortcut)**.
 
 Now right-click this newly created shortcut,
+select **Properties**,
 and change **Target** into::
 
   %comspec% /k <path>\buildenv.bat C:\Python32 msvc2008 64 Documents
