@@ -10,6 +10,48 @@ if "%2" == "" (
     goto end
 )
 
+rem **********
+rem *** Qt ***
+rem **********
+
+:qt
+echo.Setting Qt Environment
+rem registry?
+if exist "C:\QtSDK" (
+  set QTHOME=C:\QtSDK
+)
+if "%QTHOME%" == "" (
+    echo.Qt not found
+    goto endqt
+)
+echo.Qt home: %QTHOME%
+for %%A in (4.7.4,4.7.3,4.7.2,4.7.1) do (
+  if exist "%QTHOME%\Desktop\Qt\%%A" set QTVERSION=%%A
+)
+if "%QTVERSION%" == "" (
+  echo.Qt version not found
+  goto endqt
+)
+echo.Qt version: %QTVERSION%
+if "%2" == "mingw" (
+  if exist "%QTHOME%\Desktop\Qt\%QTVERSION%\mingw" set QTDIR=%QTHOME%\Desktop\Qt\%QTVERSION%\mingw
+) else (
+  echo.Detection of Qt with non-mingw compilers not yet implemented.
+  echo.Qt directory not set.
+  goto endqt
+)
+if "%QTDIR%" == "" (
+  echo.Qt directory not found
+  goto endqt
+)
+rem PATH set later; see :mingw
+echo.Qt directory: %QTDIR%
+:endqt
+
+rem ****************
+rem *** Compiler ***
+rem ****************
+
 rem get the 32-bit program files folder
 set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
@@ -35,6 +77,10 @@ goto error
 if "%3" == "32" goto sdk70_32
 if "%3" == "64" goto sdk70_64
 goto error
+
+rem ************
+rem *** MSVC ***
+rem ************
 
 :msvc2008_32
 call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
@@ -68,11 +114,34 @@ set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib\x64";%LIB%
 goto python_msvc
 
+rem *************
+rem *** MinGW ***
+rem *************
+
 :mingw
 if "%3" == "64" goto error
 echo.Setting MinGW Environment
-set PATH=C:\mingw\bin;%PATH%
+if "%QTDIR%" == "" goto mingw_standalone
+if not "%QTDIR%" == "" goto mingw_qt
+goto error
+
+:mingw_standalone
+if exist "C:\mingw\bin" (
+  echo.Using standalone MinGW
+  set PATH=C:\mingw\bin;%PATH%
+) else (
+  echo.MinGW not found
+)
 goto python_mingw
+
+:mingw_qt
+echo.Using MinGW bundled with Qt
+set PATH=%QTDIR%\bin;%QTHOME%\mingw\bin;%PATH%
+goto python_mingw
+
+rem **************
+rem *** Python ***
+rem **************
 
 :python_msvc
 echo.[build]> "%1\Lib\distutils\distutils.cfg"
@@ -91,6 +160,10 @@ set PATH=%1;%1\Scripts;%PATH%
 rem PYTHONPATH has another purpose
 set PYTHONFOLDER=%1
 goto blender
+
+rem ***************
+rem *** Blender ***
+rem ***************
 
 :blender
 echo.Setting Blender Environment
@@ -117,34 +190,6 @@ if "%BLENDERADDONS%" == "" (
 )
 echo.Blender addons: %BLENDERADDONS%
 :endblender
-
-:qt
-echo.Setting Qt Environment
-rem registry?
-if exist "C:\QtSDK" (
-  set QTHOME=C:\QtSDK
-)
-if "%QTHOME%" == "" (
-    echo.Qt not found
-    goto endqt
-)
-echo.Qt home: %QTHOME%
-for %%A in (4.7.4,4.7.3,4.7.2,4.7.1) do (
-  if exist "%QTHOME%\Desktop\Qt\%%A" set QTVERSION=%%A
-)
-if "%QTVERSION%" == "" (
-  echo.Qt version not found
-  goto endqt
-)
-echo.Qt version: %QTVERSION%
-rem assuming mingw, should detect this and check against command line arguments
-if exist "%QTHOME%\Desktop\Qt\%QTVERSION%\mingw" set QTDIR=%QTHOME%\Desktop\Qt\%QTVERSION%\mingw
-if "%QTDIR%" == "" (
-  echo.Qt directory not found
-  goto endqt
-)
-echo.Qt directory: %QTDIR%
-:endqt
 
 goto end
 
