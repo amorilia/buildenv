@@ -191,6 +191,22 @@ if "%BLENDERADDONS%" == "" (
 echo.Blender addons: %BLENDERADDONS%
 :endblender
 
+rem ************
+rem *** NSIS ***
+rem ************
+
+:nsis
+echo.Setting NSIS Environment
+if exist "%ProgramFiles%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles%\NSIS
+if exist "%ProgramFiles32%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles32%\NSIS
+if "%NSISHOME%" == "" (
+  echo.NSIS not found
+  goto endnsis
+)
+echo.NSIS home: %NSISHOME%
+set PATH=%NSISHOME%;%PATH%
+:endnsis
+
 goto end
 
 :error

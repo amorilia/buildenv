@@ -43,7 +43,9 @@ The batch script does the following:
 * Set *BLENDERHOME*, *BLENDERVERSION*, and *BLENDERADDONS* according
   to whatever version of Blender is found via the registry.
 * Set *QTHOME*, *QTVERSION*, and *QTDIR* according to whatever version
-  of the Qt SDK is found.
+  of the Qt SDK is found, and update *PATH*.
+* Set *NSISHOME* according to whatever version of NSIS is found, and
+  update *PATH*
 
 Supported Compilers
 ~~~~~~~~~~~~~~~~~~~
@@ -68,3 +70,8 @@ Supported versions of Qt SDK
 
 * Only tested with Qt 4.7.4 with mingw
   (Qt SDK 1.1.0).
+
+Supported versions of NSIS
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Any.
