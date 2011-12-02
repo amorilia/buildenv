@@ -117,6 +117,35 @@ if "%BLENDERADDONS%" == "" (
 )
 echo.Blender addons: %BLENDERADDONS%
 :endblender
+
+:qt
+echo.Setting Qt Environment
+rem registry?
+if exist "C:\QtSDK" (
+  set QTHOME=C:\QtSDK
+)
+if "%QTHOME%" == "" (
+    echo.Qt not found
+    goto endqt
+)
+echo.Qt home: %QTHOME%
+for %%A in (4.7.4,4.7.3,4.7.2,4.7.1) do (
+  if exist "%QTHOME%\Desktop\Qt\%%A" set QTVERSION=%%A
+)
+if "%QTVERSION%" == "" (
+  echo.Qt version not found
+  goto endqt
+)
+echo.Qt version: %QTVERSION%
+rem assuming mingw, should detect this and check against command line arguments
+if exist "%QTHOME%\Desktop\Qt\%QTVERSION%\mingw" set QTDIR=%QTHOME%\Desktop\Qt\%QTVERSION%\mingw
+if "%QTDIR%" == "" (
+  echo.Qt directory not found
+  goto endqt
+)
+echo.Qt directory: %QTDIR%
+:endqt
+
 goto end
 
 :error

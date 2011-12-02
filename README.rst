@@ -42,6 +42,8 @@ The batch script does the following:
   Python resides.
 * Set *BLENDERHOME*, *BLENDERVERSION*, and *BLENDERADDONS* according
   to whatever version of Blender is found via the registry.
+* Set *QTHOME*, *QTVERSION*, and *QTDIR* according to whatever version
+  of the Qt SDK is found.
 
 Supported Compilers
 ~~~~~~~~~~~~~~~~~~~
@@ -60,3 +62,9 @@ Supported versions of Python
 
 * Any. However, for compiling extension modules, only 2.6 and higher
   are well supported.
+
+Supported versions of Qt SDK
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Only tested with Qt 4.7.4 with mingw
+  (Qt SDK 1.1.0).
