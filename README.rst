@@ -53,7 +53,7 @@ Supported Compilers
 Supported versions of Blender
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* 2.57, 2.58, and 2.59.
+* 2.57, 2.58, 2.59, and 2.60.
 
 Supported versions of Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
