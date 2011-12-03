@@ -207,6 +207,22 @@ echo.NSIS home: %NSISHOME%
 set PATH=%NSISHOME%;%PATH%
 :endnsis
 
+rem ***********
+rem *** Git ***
+rem ***********
+
+:git
+echo.Setting Git Environment
+if exist "%ProgramFiles%\Git\bin\git.exe" set GITHOME=%ProgramFiles%\Git
+if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git
+if "%GITHOME%" == "" (
+  echo.Git not found
+  goto endgit
+)
+echo.Git home: %GITHOME%
+set PATH=%GITHOME%\bin;%PATH%
+:endgit
+
 goto end
 
 :error

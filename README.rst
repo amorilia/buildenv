@@ -76,3 +76,8 @@ Supported versions of NSIS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Any.
+
+Supported versions of Git
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* `msysGit <http://code.google.com/p/msysgit/>`_.
