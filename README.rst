@@ -71,7 +71,7 @@ Supported versions of Qt SDK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Only tested with Qt 4.7.4 with mingw
-  (Qt SDK 1.1.0).
+  (Qt SDK 1.1.4).
 
 Supported versions of NSIS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
