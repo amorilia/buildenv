@@ -46,7 +46,8 @@ The batch script does the following:
 * Set *QTHOME*, *QTVERSION*, and *QTDIR* according to whatever version
   of the Qt SDK is found, and update *PATH*.
 * Set *NSISHOME* according to whatever version of NSIS is found, and
-  update *PATH*
+  update *PATH*.
+* Set *GITHOME* to the msysGit folder, and update *PATH*.
 
 Supported Compilers
 ~~~~~~~~~~~~~~~~~~~
