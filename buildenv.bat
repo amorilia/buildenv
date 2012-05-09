@@ -1,14 +1,186 @@
 @echo off
 
-if "%2" == "" (
-    echo.buildenv.bat ^<python-path^> ^<compiler^> ^<arch^> ^<folder^>
-    echo.
-    echo.  ^<python-path^> = path to directory containing python.exe
-    echo.  ^<compiler^>    = msvc2008/mingw
-    echo.  ^<arch^>        = 32/64
-    echo.  ^<folder^>      = start folder, relative to %HOMEPATH%
-    goto end
+if "%1" == "-help" ( 
+    if "%2" == "" (
+    goto displayparams
+    ) 
+    goto helpcommands 
 )
+
+if "%1" == "" (
+goto displayparams
+)
+
+goto checkparams
+
+:displayparams
+    echo.buildenv.bat 
+    echo.   -workfolder -arch 
+    echo.   [-compiler] [-gitpath] [-pythonpath]   
+    echo.   [-qt] [-nsis]
+    echo.    
+    goto end
+
+:helpcommands
+if "%2" == "-arch" ( 
+echo.
+echo.   Set the Architecture to either :32 or :64
+echo.
+goto end
+)
+
+if "%2" == "-workfolder" ( 
+echo.
+echo.   Start folder, relative to %HOMEPATH%
+echo.   Which folder to use as the root directory. eg. "C:\Documents and Settings\<user>\workspace\"
+echo.
+goto end
+)
+    
+if "%2" == "-pythonpath" ( 
+echo.
+echo.   The path to your python installation.
+echo.   Path to directory containing python.exe eg. C:\Python32
+echo.
+goto end
+)
+    
+if "%2" == "-gitpath" ( 
+echo.
+echo.   Location of msysGit
+echo.   
+goto end
+)
+    
+if "%2" == "-compiler" ( 
+echo.
+echo.   Choose which compiler which to use to compile the various Niftools Repos.
+echo.   BuildEnv supports [msvc2008] | [mingw]
+echo. 
+goto end
+)
+
+if "%2" == "-nsis" ( 
+echo.
+echo.   Location of nsis.exe used to create installers for the various Niftools Repos.
+echo.
+goto end
+)
+
+if "%2" == "-qt" ( 
+echo.
+echo.   Location of qt.
+echo.
+goto end
+)
+
+
+
+:checkparams
+rem grab the first variable
+
+set SWITCHPARSE=%1
+if "%SWITCHPARSE%" == "" ( goto end)
+
+for /F "tokens=1,2 delims=: " %%a IN ("%SWITCHPARSE%") DO SET SWITCH=%%a&set VALUE=%%b
+
+if "%SWITCH%" == "-arch" ( 
+set arch_type=%VALUE%
+SHIFT
+goto architecture
+)
+
+if "%SWITCH%" == "-workfolder" ( 
+set work_folder = %VALUE%
+SHIFT
+goto checkparams
+)
+
+if "%SWITCH%" == "-pythonpath" ( 
+set python_path = %VALUE%
+SHIFT
+goto checkparams
+)
+
+if "%SWITCH%" == "-gitpath" ( 
+set git_path = %VALUE%
+SHIFT
+goto git
+)
+
+if "%SWITCH%" == "-compiler" ( 
+set compiler_type = %VALUE%
+SHIFT
+goto checkparams
+)
+
+if "%SWITCH%" == "-qtpath" ( 
+set qt_location = %VALUE%
+SHIFT
+goto checkparams
+)
+
+if "%SWITCH%" == "-nsispath" ( 
+set nsis_location = %VALUE%
+SHIFT
+goto checkparams
+)
+
+if "%1" == "" (
+goto end
+)
+
+SHIFT
+goto checkparams
+
+
+rem ********************
+rem *** Architecture ***
+rem ********************
+
+:architecture
+echo.Setting Program Files
+rem get the 32-bit program files folder
+if "%arch_type%" == "32" (
+    set ProgramFiles32=%ProgramFiles%
+)else (
+    set ProgramFiles32=%ProgramFiles(x86)%
+)
+echo. Program Files Folder: %ProgramFiles32%
+
+goto checkparams
+:endarchitecture
+
+rem ***********
+rem *** Git ***
+rem ***********
+
+:git
+echo.Setting Git Environment
+
+if "%git_path%" == "" ( 
+if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git
+) else (
+GITHOME=%git_path%
+)
+
+if "%GITHOME%" == "" (
+  echo.Git not found
+  goto endgit
+)
+echo.Git home: %GITHOME%
+set PATH=%GITHOME%\bin;%PATH%
+
+goto checkparams
+:endgit
+
+
+
+
+
+
+
+
 
 rem **********
 rem *** Qt ***
@@ -48,41 +220,14 @@ rem PATH set later; see :mingw
 echo.Qt directory: %QTDIR%
 :endqt
 
-rem ****************
-rem *** Compiler ***
-rem ****************
 
-rem get the 32-bit program files folder
-set ProgramFiles32=%ProgramFiles%
-if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
-
-if "%2" == "msvc2008" goto msvc2008
-if "%2" == "mingw" goto mingw
-rem sdk60 and sdk70 are no longer documented but could still be useful
-if "%2" == "sdk60" goto sdk60
-if "%2" == "sdk70" goto sdk70
-goto error
-
-:msvc2008
-if "%3" == "32" goto msvc2008_32
-if "%3" == "64" goto msvc2008_64
-goto error
-
-:sdk60
-if "%3" == "32" goto sdk60_32
-if "%3" == "64" goto sdk60_64
-goto error
-
-:sdk70
-if "%3" == "32" goto sdk70_32
-if "%3" == "64" goto sdk70_64
-goto error
 
 rem ************
 rem *** MSVC ***
 rem ************
 
 :msvc2008_32
+if exist 
 call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
 goto python_msvc
 
@@ -167,7 +312,7 @@ rem ***************
 
 :blender
 echo.Setting Blender Environment
-for /F "tokens=2* delims=	 " %%A in ('REG QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir') do (
+for /F "tokens=2* delims=   " %%A in ('REG QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir') do (
   set BLENDERHOME=%%B
 )
 if "%BLENDERHOME%" == "" (
@@ -207,21 +352,7 @@ echo.NSIS home: %NSISHOME%
 set PATH=%NSISHOME%;%PATH%
 :endnsis
 
-rem ***********
-rem *** Git ***
-rem ***********
 
-:git
-echo.Setting Git Environment
-if exist "%ProgramFiles%\Git\bin\git.exe" set GITHOME=%ProgramFiles%\Git
-if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git
-if "%GITHOME%" == "" (
-  echo.Git not found
-  goto endgit
-)
-echo.Git home: %GITHOME%
-set PATH=%GITHOME%\bin;%PATH%
-:endgit
 
 goto end
 
@@ -230,6 +361,35 @@ echo.Bad command line arguments.
 pause
 exit
 
+
+
+
+if "%2" == "msvc2008" goto msvc2008
+if "%2" == "mingw" goto mingw
+rem sdk60 and sdk70 are no longer documented but could still be useful
+if "%2" == "sdk60" goto sdk60
+if "%2" == "sdk70" goto sdk70
+goto error
+
+:msvc2008
+if "%3" == "32" goto msvc2008_32
+if "%3" == "64" goto msvc2008_64
+goto error
+
+:sdk60
+if "%3" == "32" goto sdk60_32
+if "%3" == "64" goto sdk60_64
+goto error
+
+:sdk70
+if "%3" == "32" goto sdk70_32
+if "%3" == "64" goto sdk70_64
+goto error
+
+
 :end
-%HOMEDRIVE%
-cd %HOMEPATH%\%4
+pause
+
+
+
+
