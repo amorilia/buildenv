@@ -6,16 +6,14 @@ Installation
 Download and unzip the source .zip file into any location of your
 choice.
 
-Right-click on the ``buildenv.bat`` file,
-and select **Send to > Desktop (create shortcut)**.
+Right-click on the ``buildenv.bat`` file, and select **Send to > Desktop (create shortcut)**.
 
-Now right-click this newly created shortcut,
-select **Properties**,
-and change **Target** into::
+Now right-click this newly created shortcut, select **Properties**, and change **Target** into::
 
   %comspec% /k "<path>\buildenv.bat" -pythonpath@C:\Python32 -workfolder@workspace
 
-A few notes:
+Notes
+-----
 * BuildEnv.bat has a number of flags which can be set using the format -flagname@value
 * Many of the values have defaults, but setting them manually is advised.
 * Running buildenv.bat will display the available flags.
@@ -23,16 +21,11 @@ A few notes:
 
 #. Change the Python path to whatever version of Python you have installed.
 
-#. For Python development, your choice of compiler must match the
-  compiler used to compile your version of Python.  For Python 2.6,
-  2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``. For older versions of
-  Python, you can try ``mingw``, although your mileage may vary.
+#. For Python development, your choice of compiler must match the compiler used to compile your version of Python.  For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``. For older versions of Python, you can try ``mingw``, although your mileage may vary.
 
 #. On 32 bit systems, type ``32`` instead of ``64``.
 
-#. The -workfolder flag is your working folder, relative to
-  ``C:\Users\<username>``. If you use eclipse, you may want to type
-  ``workspace``.
+#. The -workfolder flag is your working folder, relative to ``C:\Users\<username>``. If you use eclipse, you may want to type ``workspace``.
 
 Features
 --------
