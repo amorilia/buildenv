@@ -397,8 +397,10 @@ echo.compiler=mingw32>> "%python_path%\Lib\distutils\distutils.cfg"
 goto end
 
 :end
-echo.Changing to workspace: %work_folder%
+echo.Changing directory: %work_folder%
 echo.
+if not "%work_folder" == "empty" (
 %HOMEDRIVE%
 cd %HOMEPATH%\%work_folder%
+)
 pause
