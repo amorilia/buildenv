@@ -1,4 +1,4 @@
-buildenv is a simple batch script for setting up a build environment on Windows.
+Buildenv is batch script used to setting up a build environment on Windows for the various projects developed by Niftools.
 
 Installation
 ------------
@@ -10,11 +10,11 @@ Right-click on the ``buildenv.bat`` file, and select **Send to > Desktop (create
 
 Now right-click this newly created shortcut, select **Properties**, and change **Target** into::
 
-  %comspec% /k "<path>\buildenv.bat" -pythonpath@C:\Python32 -workfolder@workspace
+  %comspec% /k "<path>\buildenv.bat" -pythonpath@C:\Python32 -workfolder@workspace -arch@32
 
 Notes
 -----
-* BuildEnv.bat has a number of flags which can be set using the format -flagname@value
+* BuildEnv.bat has a number of flags which can be set using the format "-flag @ value"
 * Many of the values have defaults, but setting them manually is advised.
 * Running buildenv.bat will display the available flags.
 * Running buildenv.bat -help -flag will give more information about that flag

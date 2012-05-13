@@ -200,7 +200,7 @@ echo.
 echo.Setting NSIS Environment
 if "%nsis_path%" == "empty" (
 if exist "%ProgramFiles32%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles32%\NSIS
-)else (
+) else (
 set NSISHOME=%nsis_path%
 )
 
@@ -238,12 +238,25 @@ rem **********
 echo.
 echo.Setting Python Environment
 if "%python_path%" == "empty" ( 
-set python_path=C:\Python32
+if exist "C:\Python32" set python_path=C:\Python32
+goto pythonfound
+) else (
+if exist "%python_path%" goto pythonfound
 )
-"%python_path%\python.exe" -c "import sys; print(sys.version)"
+goto pythonnotfound
+
+:pythonfound
 set PATH=%python_path%;%python_path%\Scripts;%PATH%
 rem PYTHONPATH has another purpose
 set PYTHONFOLDER=%python_path%
+python -c "import sys; print(sys.version)"
+goto qt
+:endpythonfound
+
+:pythonnotfound
+echo.Python not found
+:endpythonnotfound
+
 
 :qt
 echo.
@@ -268,7 +281,9 @@ if "%QTVERSION%" == "" (
   echo.Qt version not found
   goto endqt
 )
+
 echo.Qt version: %QTVERSION%
+
 if exist "%QTHOME%\Desktop\Qt\%QTVERSION%\mingw" (
 set QTDIR=%QTHOME%\Desktop\Qt\%QTVERSION%\mingw
 ) else (
@@ -283,13 +298,11 @@ if "%QTDIR%" == "" (
 rem PATH set later; see :mingw
 echo.Qt directory: %QTDIR%
 
-
 :endqt
 
 rem ***************
 rem ** Compilers **
 rem ***************
-
 
 :compilers
 if "arch_type" == "empty" set arch_type=32
@@ -383,24 +396,31 @@ set PATH=%QTDIR%\bin;%QTHOME%\mingw\bin;%PATH%
 goto python_mingw
 
 :python_msvc
+if exist %python_path% (
 echo.
 echo.Setting python compiler.
 echo.[build]> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 echo.compiler=msvc>> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
+)
 goto end
 
+
 :python_mingw
+if exist %python_path% (
 echo.
 echo.Setting python compiler.
 echo.[build]> "%python_path%\Lib\distutils\distutils.cfg"
 echo.compiler=mingw32>> "%python_path%\Lib\distutils\distutils.cfg"
+)
 goto end
 
 :end
-echo.Changing directory: %work_folder%
+echo.Changing to directory: %work_folder%
 echo.
 if not "%work_folder" == "empty" (
 %HOMEDRIVE%
 cd %HOMEPATH%\%work_folder%
 )
+
+echo. %PATH%
 pause
