@@ -219,13 +219,14 @@ rem ***********
 :git
 echo.
 echo.Setting Git Environment
-if %git_path% == "empty" (
+if "%git_path%" == "empty" (
 if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git 
 ) else (
 if exist "%git_path%" set GITHOME=%git_path%
 if "%GITHOME%" == "" (
   echo.Git not found
   goto endgit
+)
 )
 echo.Git home: %GITHOME%
 set PATH=%GITHOME%\bin;%PATH%
