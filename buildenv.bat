@@ -201,7 +201,7 @@ echo.Setting NSIS Environment
 if "%nsis_path%" == "empty" (
 if exist "%ProgramFiles32%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles32%\NSIS
 ) else (
-set NSISHOME=%nsis_path%
+if exist "%nsis_path%" set NSISHOME=%nsis_path%
 )
 
 if "%NSISHOME%" == "" (
@@ -219,8 +219,10 @@ rem ***********
 :git
 echo.
 echo.Setting Git Environment
-if exist "%ProgramFiles%\Git\bin\git.exe" set GITHOME=%ProgramFiles%\Git
-if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git
+if %git_path% == "empty" (
+if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git 
+) else (
+if exist "%git_path%" set GITHOME=%git_path%
 if "%GITHOME%" == "" (
   echo.Git not found
   goto endgit
@@ -422,5 +424,4 @@ if not "%work_folder" == "empty" (
 cd %HOMEPATH%\%work_folder%
 )
 
-echo. %PATH%
 pause
