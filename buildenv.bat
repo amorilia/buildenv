@@ -228,14 +228,15 @@ rem ***********
 :git
 echo.
 echo.Setting Git Environment
-if "%git_path%" == "empty" (
-if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git 
-) else (
+if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git
+if exist "%ProgramFiles%\Git\bin\git.exe" set GITHOME=%ProgramFiles%\Git
+if exist "%LOCALAPPDATA%\GitHub" (
+  for /f "tokens=*" %%A in ('dir %LOCALAPPDATA%\GitHub\PortableGit_* /b') do set GITHOME=%LOCALAPPDATA%\GitHub\%%A
+)
 if exist "%git_path%" set GITHOME=%git_path%
 if "%GITHOME%" == "" (
   echo.Git not found
   goto endgit
-)
 )
 echo.Git home: %GITHOME%
 set PATH=%GITHOME%\bin;%PATH%
