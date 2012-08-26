@@ -318,7 +318,6 @@ rem ** Compilers **
 rem ***************
 
 :compilers
-if "arch_type" == "empty" set arch_type=32
 if "%2" == "msvc2008" goto msvc2008
 if "%2" == "mingw" goto mingw
 if "%2" == "sdk60" goto sdk60
