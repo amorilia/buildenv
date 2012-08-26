@@ -148,15 +148,27 @@ echo.Script Running:
 echo.
 echo.Setting Program Files
 
-rem get the 32-bit program files folder
-set ProgramFiles32=%ProgramFiles(x86)%
-if "%ProgramFiles32%" == "" (
-    if "%arch_type%" == "empty" set arch_type=32
-    set ProgramFiles32=%ProgramFiles%
+rem Implementation note: do not embed %ProgramFiles32% into brackets
+rem because the brackets will be misinterpreted by the command processor
+rem http://marsbox.com/blog/howtos/batch-file-programfiles-x86-parenthesis-anomaly/
+set ProgramFiles32=%ProgramFiles%
+if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
+
+echo.Program Folder:
+echo.  32-bit: %ProgramFiles32%
+echo.  native: %ProgramFiles%
+
+echo.
+echo.Setting Architecture
+
+if "%ProgramFiles(x86)%" == "" (
+  if "%arch_type%" == "empty" set arch_type=32
 ) else (
-if "%arch_type%" == "empty" set arch_type=64
+  if "%arch_type%" == "empty" set arch_type=64
 )
-echo.Program Folder: %ProgramFiles32%
+
+echo.Architecture: %arch_type% bit
+
 :endsettings
 
 rem ***************
@@ -198,12 +210,9 @@ rem ************
 :nsis
 echo.
 echo.Setting NSIS Environment
-if "%nsis_path%" == "empty" (
 if exist "%ProgramFiles32%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles32%\NSIS
-) else (
+if exist "%ProgramFiles%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles%\NSIS
 if exist "%nsis_path%" set NSISHOME=%nsis_path%
-)
-
 if "%NSISHOME%" == "" (
   echo.NSIS not found
   goto endnsis
