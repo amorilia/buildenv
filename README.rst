@@ -37,7 +37,8 @@ The batch script does the following:
 * Update Python's ``distutils.cfg`` to use the specified compiler.
 * Set *PYTHONFOLDER* to the folder where the specified version of
   Python resides.
-* Set *BLENDERHOME*, *BLENDERVERSION*, and *BLENDERADDONS* according
+* Set *BLENDERHOME*, *BLENDERVERSION*, *BLENDERADDONS*,
+  and *APPDATABLENDERADDONS* according
   to whatever version of Blender is found via the registry.
 * Set *QTHOME*, *QTVERSION*, and *QTDIR* according to whatever version
   of the Qt SDK is found, and update *PATH*.

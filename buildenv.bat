@@ -200,7 +200,9 @@ if "%BLENDERADDONS%" == "" (
   echo.Blender addons not found
   goto endblender
 )
-echo.Blender addons: %BLENDERADDONS%
+set APPDATABLENDERADDONS=%APPDATA%\Blender Foundation\Blender\%BLENDERVERSION%\scripts\addons
+echo.Global Blender addons: %BLENDERADDONS%
+echo.Local Blender addons: %APPDATABLENDERADDONS%
 :endblender
 
 
