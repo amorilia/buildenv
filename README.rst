@@ -23,7 +23,8 @@ Notes
 * For Python development, your choice of compiler must match the compiler used to compile your version of Python.  For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``.
   For older versions of Python, you can try ``mingw``, although your mileage may vary.
 * On 32 bit systems, type ``-arch@32`` instead of ``-arch@64``.
-* The -workfolder flag is your working folder, relative to ``C:\Users\<username>``.
+* The -workfolder flag is your working folder,
+  either relative to ``C:\Users\<username>``, or absolute.
   If you use eclipse, you may want to type ``workspace``.
 
 Features
