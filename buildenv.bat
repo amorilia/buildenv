@@ -40,7 +40,7 @@ echo.
 
 if "%2" == "-workfolder" ( 
 echo.
-echo.   Start folder, relative to %HOMEPATH%
+echo.   Start folder, either relative to %HOMEDRIVE%%HOMEPATH%, or absolute.
 echo.   Which folder to use as the root directory. e.g workspace
 echo.
 goto end
@@ -374,8 +374,8 @@ if "%QTDIR%" == "" goto mingw_standalone
 if not "%QTDIR%" == "" goto mingw_qt
 
 :mingwx64
-echo.This compiler is not supported yet.
-goto compilernotfound
+echo.Compiler not supported by buildenv.
+goto endcompiler
 
 :mingw_standalone
 if exist "C:\mingw\bin" (
@@ -384,7 +384,7 @@ if exist "C:\mingw\bin" (
   goto python_mingw
 ) else (
   echo.MinGW not found
-  goto end
+  goto endcompiler
 )
 
 :mingw_qt
@@ -394,33 +394,40 @@ goto python_mingw
 
 :python_msvc
 if exist %PYTHONFOLDER% (
-echo.
-echo.Setting python compiler.
+echo.Setting python compiler for msvc.
 echo.[build]> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 echo.compiler=msvc>> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 )
-goto end
+goto endcompiler
 
 
 :python_mingw
 if exist %PYTHONFOLDER% (
-echo.
-echo.Setting python compiler.
+echo.Setting python compiler for mingw32.
 echo.[build]> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 echo.compiler=mingw32>> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 )
-goto end
+goto endcompiler
 
 :compilernotfound
 echo.Compiler not found
+
 :endcompiler
 
-:end
-echo.Changing to directory: %work_folder%
+:workfolder
+if "%work_folder%" == "empty" goto endworkfolder
+if exist "%HOMEDRIVE%%HOMEPATH%\%work_folder%" set work_folder=%HOMEDRIVE%%HOMEPATH%\%work_folder%
 echo.
-if not "%work_folder%" == "empty" (
-%HOMEDRIVE%
-cd %HOMEPATH%\%work_folder%
-)
+echo.Changing to directory: %work_folder%
+if not exist "%work_folder%" goto workfoldernotfound
+cd /d "%work_folder%"
+goto endworkfolder
+
+:workfoldernotfound
+echo.Directory not found.
+
+:endworkfolder
+
+:end
 
 pause
