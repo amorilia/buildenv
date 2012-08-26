@@ -16,6 +16,7 @@ set git_path=empty
 set python_path=empty
 set qt_path=empty
 set nsis_path=empty
+set compiler_type=msvc2008
 echo. 
 goto checkparams
 )
@@ -318,79 +319,63 @@ rem ** Compilers **
 rem ***************
 
 :compilers
-if "%2" == "msvc2008" goto msvc2008
-if "%2" == "mingw" goto mingw
-if "%2" == "sdk60" goto sdk60
-if "%2" == "sdk70" goto sdk70
-
-:msvc2008
 echo.
-echo.Setting MSVC:2008
-rem bat-file will auto-set the path stuff for us. 
+echo.Setting Compiler Environment (%compiler_type%, %arch_type% bit)
 
-if "%arch_type%" == "64" (
-if exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" (
-call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" 
-goto python_msvc )
-)
+if "%compiler_type%x%arch_type%" == "msvc2008x32" goto msvc2008x32
+if "%compiler_type%x%arch_type%" == "msvc2008x64" goto msvc2008x64
+if "%compiler_type%x%arch_type%" == "mingwx32" goto mingwx32
+if "%compiler_type%x%arch_type%" == "mingwx64" goto mingwx64
+if "%compiler_type%x%arch_type%" == "sdk60x32" goto sdk60x32
+if "%compiler_type%x%arch_type%" == "sdk60x64" goto sdk60x64
+if "%compiler_type%x%arch_type%" == "sdk70x32" goto sdk70x32
+if "%compiler_type%x%arch_type%" == "sdk70x64" goto sdk70x64
 
-if "%arch_type%" == "32" (
-if exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" (
+:msvc2008x64
+if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" goto compilernotfound
+call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat"
+goto python_msvc
+
+:msvc2008x32
+if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" goto compilernotfound
 call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" 
-goto python_msvc ) 
-)
+goto python_msvc
 
-echo.MSVC:2008 not found
-:endmsvc
-
-:sdk60
-echo.
-echo.Setting Microsoft SDK:60 
-
-if "%arch_type%" == "32" (
-if exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin" (
+:sdk60x32
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin" goto compilernotfound
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin";%PATH% 
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\lib";%LIB% 
-goto python_msvc )
-)
+goto python_msvc
 
-if "%arch_type%" == "64" (
-if exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin\x64" (
+:sdk60x64
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin\x64" goto compilernotfound
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin\x64";%PATH%
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\lib\x64";%LIB% 
-goto python_msvc )
-)
+goto python_msvc
 
-echo.Microsoft SDK:60 not found
-:endsdk60
-
-:sdk70
-echo.
-echo.Setting Microsoft SDK:70
-if "%arch_type%" == "32" ( 
-if exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin" (
+:sdk70x32
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin" goto compilernotfound
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin";%PATH%
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib";%LIB%
-goto python_msvc )
-) 
+goto python_msvc
 
-if "%arch_type%" == "64" (
-if exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64" ( 
+:sdk70x64
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64" goto compilernotfound
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64";%PATH%
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib\x64";%LIB%
-goto python_msvc )
-)
-:endsdk70
+goto python_msvc
 
-:mingw
-echo.
-echo.Setting MinGW Environment
+:mingwx32
 if "%QTDIR%" == "" goto mingw_standalone
 if not "%QTDIR%" == "" goto mingw_qt
+
+:mingwx64
+echo.This compiler is not supported yet.
+goto compilernotfound
 
 :mingw_standalone
 if exist "C:\mingw\bin" (
@@ -408,7 +393,7 @@ set PATH=%QTDIR%\bin;%QTHOME%\mingw\bin;%PATH%
 goto python_mingw
 
 :python_msvc
-if exist %python_path% (
+if exist %PYTHONFOLDER% (
 echo.
 echo.Setting python compiler.
 echo.[build]> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
@@ -418,13 +403,17 @@ goto end
 
 
 :python_mingw
-if exist %python_path% (
+if exist %PYTHONFOLDER% (
 echo.
 echo.Setting python compiler.
-echo.[build]> "%python_path%\Lib\distutils\distutils.cfg"
-echo.compiler=mingw32>> "%python_path%\Lib\distutils\distutils.cfg"
+echo.[build]> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
+echo.compiler=mingw32>> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 )
 goto end
+
+:compilernotfound
+echo.Compiler not found
+:endcompiler
 
 :end
 echo.Changing to directory: %work_folder%
