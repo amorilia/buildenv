@@ -418,7 +418,7 @@ echo.Compiler not found
 :end
 echo.Changing to directory: %work_folder%
 echo.
-if not "%work_folder" == "empty" (
+if not "%work_folder%" == "empty" (
 %HOMEDRIVE%
 cd %HOMEPATH%\%work_folder%
 )
