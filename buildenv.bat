@@ -1,11 +1,5 @@
 @echo off
 
-if "%1" == "-help" (   
-    goto helpcommands 
-)
-
-if "%1" == "" goto displayparams 
-
 rem *************************
 rem ** Default Flag Values **
 rem *************************
@@ -15,84 +9,49 @@ if not "%ProgramFiles(x86)%" == "" set arch_type=64
 set qt_path=C:\QtSDK
 set python_path=C:\Python32
 set compiler_type=msvc2008
-echo. 
+
+if "%1" == "-help" goto displayparams
+if "%1" == "--help" goto displayparams
+if "%1" == "-h" goto displayparams
+if "%1" == "/h" goto displayparams
+if "%1" == "/?" goto displayparams
+if "%1" == "" goto displayparams 
 goto checkparams
 
 :displayparams
-    echo.buildenv.bat 
-    echo.   Flags: -workfolder 
-    echo.   Optional: -compiler -gitpath -pythonpath -qt -nsis
-    echo.   Types -help [parameter] for additional help.
-    echo.
-    goto end
-
-:helpcommands
-
-if "%2" == "-arch" (
+echo.Usage: buildenv.bat [options]
 echo.
-echo.   Sets the architecture of your computer. Either 32 or 64.
-echo.   Used to configure which compilers to use
+echo.Initialize environment for software development.
 echo.
-)
-
-if "%2" == "-workfolder" ( 
-echo.
-echo.   Start folder, either relative to %HOMEDRIVE%%HOMEPATH%, or absolute.
-echo.   Which folder to use as the root directory. e.g workspace
-echo.
-goto end
-)
-    
-if "%2" == "-pythonpath" ( 
-echo.
-echo.   The path to your python installation.
-echo.   Path to directory containing python.exe eg. C:\Python32
+echo.Options:
+echo.  -arch@BITS              compiler BITS architecture: 32, or 64 [default: %arch_type%]
+echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, or mingw
+echo.                          [default: %compiler_type%]
+echo.  -pythonpath@FOLDER      the base FOLDER of your Python installation;
+echo.                          its architecture must match BITS
+echo.                          [default: %python_path%]
+echo.  -workfolder@FOLDER      start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH%,
+echo.                          or absolute
+echo.                          [default: %HOMEDRIVE%%HOMEPATH%]
+echo.  -gitpath@FOLDER         the base FOLDER of your Git installation;
+echo.                          use this flag when automatic detection fails
+echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
+echo.                          use this flag when automatic detection fails
+echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
+echo.                          use this flag when automatic detection fails
 echo.
 goto end
-)
-    
-if "%2" == "-gitpath" ( 
-echo.
-echo.   Location of msysGit
-echo.   
-goto end
-)
-
-if "%2" == "-compiler" (
-echo.
-echo.   Choose which compiler which to use to compile the various Niftools Repos.
-echo.   BuildEnv supports msvc2008, mingw-32
-echo. 
-goto end
-)
-
-if "%2" == "-nsis" ( 
-echo.
-echo.   Location of nsis.exe used to create installers for the various Niftools Repos.
-echo.
-goto end
-)
-
-if "%2" == "-qt" ( 
-echo.
-echo.   Location of qt.
-echo.
-goto end
-)
-
-if "%2" == "" (
-echo. 
-echo.   Type a flag eg. -workfolder
-echo.
-goto end   
-)
 
 :checkparams
 rem grab the first variable
 
 set SWITCHPARSE=%1
-if "%SWITCHPARSE%" == "" ( goto settings)
+if "%SWITCHPARSE%" == "" goto settings
 
+rem implementation note:
+rem can't use = as delimiter because anything after = is not passed to buildenv.bat
+rem can't use : as delimiter because that's a common symbol in absolute paths
+rem so we use @
 for /F "tokens=1,2 delims=@ " %%a IN ("%SWITCHPARSE%") DO SET SWITCH=%%a&set VALUE=%%b
 
 if "%SWITCH%" == "-arch" ( 
