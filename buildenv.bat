@@ -1,100 +1,58 @@
 @echo off
 
-if "%1" == "-help" (   
-    goto helpcommands 
-)
+rem *************************
+rem ** Default Flag Values **
+rem *************************
 
-if "%1" == "" (
-goto displayparams 
-) else ( 
-rem ********************
-rem ** Optional Flags **
-rem ********************
+if "%ProgramFiles(x86)%" == "" set arch_type=32
+if not "%ProgramFiles(x86)%" == "" set arch_type=64
+set qt_path=C:\QtSDK
+set python_path=C:\Python32
+set compiler_type=msvc2008
+set work_folder=%HOMEDRIVE%%HOMEPATH%
 
-set arch_type=empty
-set git_path=empty
-set python_path=empty
-set qt_path=empty
-set nsis_path=empty
-echo. 
+if "%1" == "-help" goto displayparams
+if "%1" == "--help" goto displayparams
+if "%1" == "-h" goto displayparams
+if "%1" == "/h" goto displayparams
+if "%1" == "/?" goto displayparams
+if "%1" == "" goto displayparams
 goto checkparams
-)
 
 :displayparams
-    echo.buildenv.bat 
-    echo.   Flags: -workfolder 
-    echo.   Optional: -compiler -gitpath -pythonpath -qt -nsis
-    echo.   Types -help [parameter] for additional help.
-    echo.
-    goto end
-
-:helpcommands
-
-if "%2" == "-arch" (
+echo.Usage: buildenv.bat [options]
 echo.
-echo.   Sets the architecture of your computer. Either 32 or 64.
-echo.   Used to configure which compilers to use
+echo.Initialize environment for software development.
 echo.
-)
-
-if "%2" == "-workfolder" ( 
-echo.
-echo.   Start folder, relative to %HOMEPATH%
-echo.   Which folder to use as the root directory. e.g workspace
-echo.
-goto end
-)
-    
-if "%2" == "-pythonpath" ( 
-echo.
-echo.   The path to your python installation.
-echo.   Path to directory containing python.exe eg. C:\Python32
+echo.Options:
+echo.  -arch@BITS              compiler BITS architecture: 32, or 64 [default: %arch_type%]
+echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, or mingw
+echo.                          [default: %compiler_type%]
+echo.  -pythonpath@FOLDER      the base FOLDER of your Python installation;
+echo.                          its architecture must match BITS
+echo.                          [default: %python_path%]
+echo.  -workfolder@FOLDER      start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH%,
+echo.                          or absolute
+echo.                          [default: %work_folder%]
+echo.  -gitpath@FOLDER         the base FOLDER of your Git installation;
+echo.                          use this flag when automatic detection fails
+echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
+echo.                          use this flag when automatic detection fails
+echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
+echo.                          use this flag when automatic detection fails
 echo.
 goto end
-)
-    
-if "%2" == "-gitpath" ( 
-echo.
-echo.   Location of msysGit
-echo.   
-goto end
-)
-
-if "%2" == "-compiler" (
-echo.
-echo.   Choose which compiler which to use to compile the various Niftools Repos.
-echo.   BuildEnv supports msvc2008, mingw-32
-echo. 
-goto end
-)
-
-if "%2" == "-nsis" ( 
-echo.
-echo.   Location of nsis.exe used to create installers for the various Niftools Repos.
-echo.
-goto end
-)
-
-if "%2" == "-qt" ( 
-echo.
-echo.   Location of qt.
-echo.
-goto end
-)
-
-if "%2" == "" (
-echo. 
-echo.   Type a flag eg. -workfolder
-echo.
-goto end   
-)
 
 :checkparams
 rem grab the first variable
 
 set SWITCHPARSE=%1
-if "%SWITCHPARSE%" == "" ( goto settings)
+if "%SWITCHPARSE%" == "" goto settings
 
+rem implementation note:
+rem can't use = as delimiter because anything after = is not passed to buildenv.bat
+rem can't use : as delimiter because that's a common symbol in absolute paths
+rem so we use @
 for /F "tokens=1,2 delims=@ " %%a IN ("%SWITCHPARSE%") DO SET SWITCH=%%a&set VALUE=%%b
 
 if "%SWITCH%" == "-arch" ( 
@@ -148,15 +106,21 @@ echo.Script Running:
 echo.
 echo.Setting Program Files
 
-rem get the 32-bit program files folder
-set ProgramFiles32=%ProgramFiles(x86)%
-if "%ProgramFiles32%" == "" (
-    if "%arch_type%" == "empty" set arch_type=32
-    set ProgramFiles32=%ProgramFiles%
-) else (
-if "%arch_type%" == "empty" set arch_type=64
-)
-echo.Program Folder: %ProgramFiles32%
+rem Implementation note: do not embed %ProgramFiles32% into brackets
+rem because the brackets will be misinterpreted by the command processor
+rem http://marsbox.com/blog/howtos/batch-file-programfiles-x86-parenthesis-anomaly/
+set ProgramFiles32=%ProgramFiles%
+if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
+
+echo.Program Folder:
+echo.  32-bit: %ProgramFiles32%
+echo.  native: %ProgramFiles%
+
+echo.
+echo.Setting Architecture
+
+echo.Architecture: %arch_type% bit
+
 :endsettings
 
 rem ***************
@@ -187,7 +151,9 @@ if "%BLENDERADDONS%" == "" (
   echo.Blender addons not found
   goto endblender
 )
-echo.Blender addons: %BLENDERADDONS%
+set APPDATABLENDERADDONS=%APPDATA%\Blender Foundation\Blender\%BLENDERVERSION%\scripts\addons
+echo.Global Blender addons: %BLENDERADDONS%
+echo.Local Blender addons: %APPDATABLENDERADDONS%
 :endblender
 
 
@@ -198,12 +164,9 @@ rem ************
 :nsis
 echo.
 echo.Setting NSIS Environment
-if "%nsis_path%" == "empty" (
 if exist "%ProgramFiles32%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles32%\NSIS
-) else (
+if exist "%ProgramFiles%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles%\NSIS
 if exist "%nsis_path%" set NSISHOME=%nsis_path%
-)
-
 if "%NSISHOME%" == "" (
   echo.NSIS not found
   goto endnsis
@@ -219,14 +182,15 @@ rem ***********
 :git
 echo.
 echo.Setting Git Environment
-if "%git_path%" == "empty" (
-if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git 
-) else (
+if exist "%ProgramFiles32%\Git\bin\git.exe" set GITHOME=%ProgramFiles32%\Git
+if exist "%ProgramFiles%\Git\bin\git.exe" set GITHOME=%ProgramFiles%\Git
+if exist "%LOCALAPPDATA%\GitHub" (
+  for /f "tokens=*" %%A in ('dir %LOCALAPPDATA%\GitHub\PortableGit_* /b') do set GITHOME=%LOCALAPPDATA%\GitHub\%%A
+)
 if exist "%git_path%" set GITHOME=%git_path%
 if "%GITHOME%" == "" (
   echo.Git not found
   goto endgit
-)
 )
 echo.Git home: %GITHOME%
 set PATH=%GITHOME%\bin;%PATH%
@@ -240,17 +204,13 @@ rem **********
 :python
 echo.
 echo.Setting Python Environment
-if "%python_path%" == "empty" ( 
-if exist "C:\Python32" set python_path=C:\Python32
-goto pythonfound
-) else (
 if exist "%python_path%" goto pythonfound
-)
 goto pythonnotfound
 
 :pythonfound
 set PATH=%python_path%;%python_path%\Scripts;%PATH%
-rem PYTHONPATH has another purpose
+rem PYTHONPATH has another purpose, so use PYTHONFOLDER
+rem http://docs.python.org/using/cmdline.html#envvar-PYTHONPATH
 set PYTHONFOLDER=%python_path%
 python -c "import sys; print(sys.version)"
 goto qt
@@ -265,13 +225,7 @@ echo.Python not found
 echo.
 echo.Setting Qt Environment
 rem registry?
-if "%qt_path%" == "empty" (
-if exist "C:\QtSDK" (
-set QTHOME=C:\QtSDK
-)
-) else (
-set QTHOME=%qt_path%
-)
+if exist "%qt_path%" set QTHOME=%qt_path%
 if "%QTHOME%" == "" (
     echo.Qt not found
     goto endqt
@@ -308,80 +262,63 @@ rem ** Compilers **
 rem ***************
 
 :compilers
-if "arch_type" == "empty" set arch_type=32
-if "%2" == "msvc2008" goto msvc2008
-if "%2" == "mingw" goto mingw
-if "%2" == "sdk60" goto sdk60
-if "%2" == "sdk70" goto sdk70
-
-:msvc2008
 echo.
-echo.Setting MSVC:2008
-rem bat-file will auto-set the path stuff for us. 
+echo.Setting Compiler Environment (%compiler_type%, %arch_type% bit)
 
-if "%arch_type%" == "64" (
-if exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" (
-call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" 
-goto python_msvc )
-)
+if "%compiler_type%x%arch_type%" == "msvc2008x32" goto msvc2008x32
+if "%compiler_type%x%arch_type%" == "msvc2008x64" goto msvc2008x64
+if "%compiler_type%x%arch_type%" == "mingwx32" goto mingwx32
+if "%compiler_type%x%arch_type%" == "mingwx64" goto mingwx64
+if "%compiler_type%x%arch_type%" == "sdk60x32" goto sdk60x32
+if "%compiler_type%x%arch_type%" == "sdk60x64" goto sdk60x64
+if "%compiler_type%x%arch_type%" == "sdk70x32" goto sdk70x32
+if "%compiler_type%x%arch_type%" == "sdk70x64" goto sdk70x64
 
-if "%arch_type%" == "32" (
-if exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" (
+:msvc2008x64
+if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" goto compilernotfound
+call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat"
+goto python_msvc
+
+:msvc2008x32
+if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" goto compilernotfound
 call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" 
-goto python_msvc ) 
-)
+goto python_msvc
 
-echo.MSVC:2008 not found
-:endmsvc
-
-:sdk60
-echo.
-echo.Setting Microsoft SDK:60 
-
-if "%arch_type%" == "32" (
-if exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin" (
+:sdk60x32
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin" goto compilernotfound
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin";%PATH% 
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\lib";%LIB% 
-goto python_msvc )
-)
+goto python_msvc
 
-if "%arch_type%" == "64" (
-if exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin\x64" (
+:sdk60x64
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin\x64" goto compilernotfound
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin\x64";%PATH%
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\lib\x64";%LIB% 
-goto python_msvc )
-)
+goto python_msvc
 
-echo.Microsoft SDK:60 not found
-:endsdk60
-
-:sdk70
-echo.
-echo.Setting Microsoft SDK:70
-if "%arch_type%" == "32" ( 
-if exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin" (
+:sdk70x32
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin" goto compilernotfound
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin";%PATH%
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib";%LIB%
-goto python_msvc )
-) 
+goto python_msvc
 
-if "%arch_type%" == "64" (
-if exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64" ( 
+:sdk70x64
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64" goto compilernotfound
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64";%PATH%
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib\x64";%LIB%
-goto python_msvc )
-)
-:endsdk70
+goto python_msvc
 
-:mingw
-echo.
-echo.Setting MinGW Environment
+:mingwx32
 if "%QTDIR%" == "" goto mingw_standalone
 if not "%QTDIR%" == "" goto mingw_qt
+
+:mingwx64
+echo.Compiler not supported by buildenv.
+goto endcompiler
 
 :mingw_standalone
 if exist "C:\mingw\bin" (
@@ -390,7 +327,7 @@ if exist "C:\mingw\bin" (
   goto python_mingw
 ) else (
   echo.MinGW not found
-  goto end
+  goto endcompiler
 )
 
 :mingw_qt
@@ -399,30 +336,41 @@ set PATH=%QTDIR%\bin;%QTHOME%\mingw\bin;%PATH%
 goto python_mingw
 
 :python_msvc
-if exist %python_path% (
-echo.
-echo.Setting python compiler.
+if exist %PYTHONFOLDER% (
+echo.Setting python compiler for msvc.
 echo.[build]> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 echo.compiler=msvc>> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 )
-goto end
+goto endcompiler
 
 
 :python_mingw
-if exist %python_path% (
-echo.
-echo.Setting python compiler.
-echo.[build]> "%python_path%\Lib\distutils\distutils.cfg"
-echo.compiler=mingw32>> "%python_path%\Lib\distutils\distutils.cfg"
+if exist %PYTHONFOLDER% (
+echo.Setting python compiler for mingw32.
+echo.[build]> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
+echo.compiler=mingw32>> "%PYTHONFOLDER%\Lib\distutils\distutils.cfg"
 )
-goto end
+goto endcompiler
+
+:compilernotfound
+echo.Compiler not found
+
+:endcompiler
+
+:workfolder
+if "%work_folder%" == "empty" goto endworkfolder
+if exist "%HOMEDRIVE%%HOMEPATH%\%work_folder%" set work_folder=%HOMEDRIVE%%HOMEPATH%\%work_folder%
+echo.
+echo.Changing to directory: %work_folder%
+if not exist "%work_folder%" goto workfoldernotfound
+cd /d "%work_folder%"
+goto endworkfolder
+
+:workfoldernotfound
+echo.Directory not found.
+
+:endworkfolder
 
 :end
-echo.Changing to directory: %work_folder%
-echo.
-if not "%work_folder" == "empty" (
-%HOMEDRIVE%
-cd %HOMEPATH%\%work_folder%
-)
 
 pause

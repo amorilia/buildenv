@@ -14,18 +14,18 @@ Now right-click this newly created shortcut, select **Properties**, and change *
 
 Notes
 -----
-* BuildEnv.bat has a number of flags which can be set using the format "-flag @ value"
+
+* BuildEnv.bat has a number of flags which can be set using the format ``-flag@value``
 * Many of the values have defaults, but setting them manually is advised.
 * Running buildenv.bat will display the available flags.
 * Running buildenv.bat -help -flag will give more information about that flag
-
-#. Change the Python path to whatever version of Python you have installed.
-
-#. For Python development, your choice of compiler must match the compiler used to compile your version of Python.  For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``. For older versions of Python, you can try ``mingw``, although your mileage may vary.
-
-#. On 32 bit systems, type ``32`` instead of ``64``.
-
-#. The -workfolder flag is your working folder, relative to ``C:\Users\<username>``. If you use eclipse, you may want to type ``workspace``.
+* Change the Python path to whatever version of Python you have installed.
+* For Python development, your choice of compiler must match the compiler used to compile your version of Python.  For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``.
+  For older versions of Python, you can try ``mingw``, although your mileage may vary.
+* On 32 bit systems, type ``-arch@32`` instead of ``-arch@64``.
+* The -workfolder flag is your working folder,
+  either relative to ``C:\Users\<username>``, or absolute.
+  If you use eclipse, you may want to type ``workspace``.
 
 Features
 --------
@@ -37,7 +37,8 @@ The batch script does the following:
 * Update Python's ``distutils.cfg`` to use the specified compiler.
 * Set *PYTHONFOLDER* to the folder where the specified version of
   Python resides.
-* Set *BLENDERHOME*, *BLENDERVERSION*, and *BLENDERADDONS* according
+* Set *BLENDERHOME*, *BLENDERVERSION*, *BLENDERADDONS*,
+  and *APPDATABLENDERADDONS* according
   to whatever version of Blender is found via the registry.
 * Set *QTHOME*, *QTVERSION*, and *QTDIR* according to whatever version
   of the Qt SDK is found, and update *PATH*.
@@ -50,7 +51,10 @@ Supported Compilers
 
 * `mingw <http://www.mingw.org/>`_ (32-bit only)
 * `Visual C++ 2008 Express <http://go.microsoft.com/?linkid=7729279>`_
-  (32-bit and 64-bit)
+  (32-bit and 64-bit).
+  For the 64-bit compiler, you also need the
+  `Microsoft Windows SDK for Windows 7 and .NET Framework 3.5 SP1
+  <http://www.microsoft.com/downloads/details.aspx?FamilyID=c17ba869-9671-4330-a63e-1fd44e0e2505>`_
 
 Supported versions of Blender
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
