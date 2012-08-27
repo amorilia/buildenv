@@ -9,13 +9,14 @@ if not "%ProgramFiles(x86)%" == "" set arch_type=64
 set qt_path=C:\QtSDK
 set python_path=C:\Python32
 set compiler_type=msvc2008
+set work_folder=%HOMEDRIVE%%HOMEPATH%
 
 if "%1" == "-help" goto displayparams
 if "%1" == "--help" goto displayparams
 if "%1" == "-h" goto displayparams
 if "%1" == "/h" goto displayparams
 if "%1" == "/?" goto displayparams
-if "%1" == "" goto displayparams 
+if "%1" == "" goto displayparams
 goto checkparams
 
 :displayparams
@@ -32,7 +33,7 @@ echo.                          its architecture must match BITS
 echo.                          [default: %python_path%]
 echo.  -workfolder@FOLDER      start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH%,
 echo.                          or absolute
-echo.                          [default: %HOMEDRIVE%%HOMEPATH%]
+echo.                          [default: %work_folder%]
 echo.  -gitpath@FOLDER         the base FOLDER of your Git installation;
 echo.                          use this flag when automatic detection fails
 echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
