@@ -4,22 +4,19 @@ if "%1" == "-help" (
     goto helpcommands 
 )
 
-if "%1" == "" (
-goto displayparams 
-) else ( 
-rem ********************
-rem ** Optional Flags **
-rem ********************
+if "%1" == "" goto displayparams 
 
-set arch_type=empty
-set git_path=empty
-set python_path=empty
-set qt_path=empty
-set nsis_path=empty
+rem *************************
+rem ** Default Flag Values **
+rem *************************
+
+if "%ProgramFiles(x86)%" == "" set arch_type=32
+if not "%ProgramFiles(x86)%" == "" set arch_type=64
+set qt_path=C:\QtSDK
+set python_path=C:\Python32
 set compiler_type=msvc2008
 echo. 
 goto checkparams
-)
 
 :displayparams
     echo.buildenv.bat 
@@ -162,12 +159,6 @@ echo.  native: %ProgramFiles%
 echo.
 echo.Setting Architecture
 
-if "%ProgramFiles(x86)%" == "" (
-  if "%arch_type%" == "empty" set arch_type=32
-) else (
-  if "%arch_type%" == "empty" set arch_type=64
-)
-
 echo.Architecture: %arch_type% bit
 
 :endsettings
@@ -253,17 +244,13 @@ rem **********
 :python
 echo.
 echo.Setting Python Environment
-if "%python_path%" == "empty" ( 
-if exist "C:\Python32" set python_path=C:\Python32
-goto pythonfound
-) else (
 if exist "%python_path%" goto pythonfound
-)
 goto pythonnotfound
 
 :pythonfound
 set PATH=%python_path%;%python_path%\Scripts;%PATH%
-rem PYTHONPATH has another purpose
+rem PYTHONPATH has another purpose, so use PYTHONFOLDER
+rem http://docs.python.org/using/cmdline.html#envvar-PYTHONPATH
 set PYTHONFOLDER=%python_path%
 python -c "import sys; print(sys.version)"
 goto qt
@@ -278,13 +265,7 @@ echo.Python not found
 echo.
 echo.Setting Qt Environment
 rem registry?
-if "%qt_path%" == "empty" (
-if exist "C:\QtSDK" (
-set QTHOME=C:\QtSDK
-)
-) else (
-set QTHOME=%qt_path%
-)
+if exist "%qt_path%" set QTHOME=%qt_path%
 if "%QTHOME%" == "" (
     echo.Qt not found
     goto endqt
