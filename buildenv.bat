@@ -166,7 +166,7 @@ echo.
 echo.Setting NSIS Environment
 if exist "%ProgramFiles32%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles32%\NSIS
 if exist "%ProgramFiles%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles%\NSIS
-if exist "%nsis_path%" set NSISHOME=%nsis_path%
+if exist "%nsis_path%\NSIS\makensis.exe" set NSISHOME=%nsis_path%\NSIS
 if "%NSISHOME%" == "" (
   echo.NSIS not found
   goto endnsis
@@ -187,7 +187,7 @@ if exist "%ProgramFiles%\Git\bin\git.exe" set GITHOME=%ProgramFiles%\Git
 if exist "%LOCALAPPDATA%\GitHub" (
   for /f "tokens=*" %%A in ('dir %LOCALAPPDATA%\GitHub\PortableGit_* /b') do set GITHOME=%LOCALAPPDATA%\GitHub\%%A
 )
-if exist "%git_path%" set GITHOME=%git_path%
+if exist "%git_path%\Git\bin\git.exe" set GITHOME=%git_path%\Git
 if "%GITHOME%" == "" (
   echo.Git not found
   goto endgit
@@ -204,7 +204,10 @@ rem **********
 :python
 echo.
 echo.Setting Python Environment
-if exist "%python_path%" goto pythonfound
+if exist "%python_path%\Python32" (
+	set python_path=%python_path%\Python32
+	goto pythonfound
+	)
 goto pythonnotfound
 
 :pythonfound
@@ -274,9 +277,24 @@ if "%compiler_type%x%arch_type%" == "sdk60x64" goto sdk60x64
 if "%compiler_type%x%arch_type%" == "sdk70x32" goto sdk70x32
 if "%compiler_type%x%arch_type%" == "sdk70x64" goto sdk70x64
 
+:msvc2008x64xND
+if not exist "%compiler_type%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" goto msvc2008x64x32xND
+call "%compiler_type%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat"
+goto python_msvc
+
+:msvc2008x64x32xND
+if not exist "%compiler_type%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" goto compilernotfound
+call "%compiler_type%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
+goto python_msvc
+
 :msvc2008x64
-if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" goto compilernotfound
+if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" goto msvc2008x64x32
 call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat"
+goto python_msvc
+
+:msvc2008x64x32
+if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" goto compilernotfound
+call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
 goto python_msvc
 
 :msvc2008x32
