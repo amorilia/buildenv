@@ -373,4 +373,18 @@ echo.Directory not found.
 
 :end
 
+rem **************
+rem ** Clean Up **
+rem **************
+
+set arch_type=
+set compiler_type=
+set git_path=
+set qt_path=
+set python_path=
+set nsis_path=
+set work_folder=
+set SWITCHPARSE=
+set SWITCH=
+
 pause
