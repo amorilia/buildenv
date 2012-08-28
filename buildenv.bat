@@ -386,5 +386,7 @@ set nsis_path=
 set work_folder=
 set SWITCHPARSE=
 set SWITCH=
+set VALUE=
+set ProgramFiles32=
 
 pause
