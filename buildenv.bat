@@ -6,10 +6,13 @@ rem *************************
 
 if "%ProgramFiles(x86)%" == "" set arch_type=32
 if not "%ProgramFiles(x86)%" == "" set arch_type=64
+set ProgramFiles32=%ProgramFiles%
+if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 set qt_path=C:\QtSDK
 set python_path=C:\Python32
 set compiler_type=msvc2008
 set work_folder=%HOMEDRIVE%%HOMEPATH%
+set _msvc2008=%ProgramFiles32%\Microsoft Visual Studio 9.0\VC
 
 if "%1" == "-help" goto displayparams
 if "%1" == "--help" goto displayparams
@@ -43,6 +46,9 @@ echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
 echo.                          use this flag when automatic detection fails
 echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
 echo.                          use this flag when automatic detection fails
+echo.  -msvc2008@FOLDER        the base FOLDER of your MSVC 2008 installation;
+echo.                          implies -compiler@msvc2008 when set
+echo.                          [default: %_msvc2008%]
 echo.
 rem Likely, the script was run from Windows explorer...
 pause
@@ -102,6 +108,13 @@ SHIFT
 goto checkparams
 )
 
+if "%SWITCH%" == "-msvc2008" (
+set _msvc2008=%VALUE%
+set compiler_type=msvc2008
+SHIFT
+goto checkparams
+)
+
 :settings
 rem ********************
 rem *** Architecture ***
@@ -114,8 +127,6 @@ echo.Setting Program Files
 rem Implementation note: do not embed %ProgramFiles32% into brackets
 rem because the brackets will be misinterpreted by the command processor
 rem http://marsbox.com/blog/howtos/batch-file-programfiles-x86-parenthesis-anomaly/
-set ProgramFiles32=%ProgramFiles%
-if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 
 echo.Program Folder:
 echo.  32-bit: %ProgramFiles32%
@@ -171,7 +182,7 @@ echo.
 echo.Setting NSIS Environment
 if exist "%ProgramFiles32%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles32%\NSIS
 if exist "%ProgramFiles%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles%\NSIS
-if exist "%nsis_path%" set NSISHOME=%nsis_path%
+if exist "%nsis_path%\makensis.exe" set NSISHOME=%nsis_path%
 if "%NSISHOME%" == "" (
   echo.NSIS not found
   goto endnsis
@@ -192,7 +203,7 @@ if exist "%ProgramFiles%\Git\bin\git.exe" set GITHOME=%ProgramFiles%\Git
 if exist "%LOCALAPPDATA%\GitHub" (
   for /f "tokens=*" %%A in ('dir %LOCALAPPDATA%\GitHub\PortableGit_* /b') do set GITHOME=%LOCALAPPDATA%\GitHub\%%A
 )
-if exist "%git_path%" set GITHOME=%git_path%
+if exist "%git_path%\bin\git.exe" set GITHOME=%git_path%
 if "%GITHOME%" == "" (
   echo.Git not found
   goto endgit
@@ -209,7 +220,10 @@ rem **********
 :python
 echo.
 echo.Setting Python Environment
-if exist "%python_path%" goto pythonfound
+if exist "%python_path%\python.exe" (
+  set python_path=%python_path%
+  goto pythonfound
+)
 goto pythonnotfound
 
 :pythonfound
@@ -229,7 +243,9 @@ echo.Python not found
 :qt
 echo.
 echo.Setting Qt Environment
-rem registry?
+rem 1. registry?
+rem 2. check for some standard file to ensure qt_path actually contains the Qt SDK?
+rem    (similar to NSIS, Git, and Python checks)
 if exist "%qt_path%" set QTHOME=%qt_path%
 if "%QTHOME%" == "" (
     echo.Qt not found
@@ -278,15 +294,16 @@ if "%compiler_type%x%arch_type%" == "sdk60x32" goto sdk60x32
 if "%compiler_type%x%arch_type%" == "sdk60x64" goto sdk60x64
 if "%compiler_type%x%arch_type%" == "sdk70x32" goto sdk70x32
 if "%compiler_type%x%arch_type%" == "sdk70x64" goto sdk70x64
+goto compilernotfound
 
 :msvc2008x64
-if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" goto compilernotfound
-call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat"
+if not exist "%_msvc2008%\bin\vcvars64.bat" goto compilernotfound
+call "%_msvc2008%\bin\vcvars64.bat"
 goto python_msvc
 
 :msvc2008x32
-if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" goto compilernotfound
-call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" 
+if not exist "%_msvc2008%\bin\vcvars32.bat" goto compilernotfound
+call "%_msvc2008%\bin\vcvars32.bat"
 goto python_msvc
 
 :sdk60x32
