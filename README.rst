@@ -1,4 +1,4 @@
-Buildenv is batch script used to setting up a build environment on Windows.
+Buildenv is batch script used to set up a build environment on Windows.
 
 Installation
 ============
