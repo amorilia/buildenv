@@ -24,7 +24,7 @@ Notes
     must match the compiler used to compile your version of Python.
     For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``.
     For older versions of Python, you can try ``mingw``,
-	although your mileage may vary.
+    although your mileage may vary.
   - ``-arch`` must match the architecture of the Python at ``-pythonpath``.
 * Other applications, such as Qt, msysGit, and NSIS, are automatically detected
   if installed at their default locations.
