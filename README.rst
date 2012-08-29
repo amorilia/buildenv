@@ -1,10 +1,9 @@
-Buildenv is batch script used to setting up a build environment on Windows for the various projects developed by Niftools.
+Buildenv is batch script used to setting up a build environment on Windows.
 
 Installation
 ------------
 
-Download and unzip the source .zip file into any location of your
-choice.
+Download and unzip the source .zip file into any location of your choice.
 
 Right-click on the ``buildenv.bat`` file, and select **Send to > Desktop (create shortcut)**.
 
@@ -15,15 +14,19 @@ Now right-click this newly created shortcut, select **Properties**, and change *
 Notes
 -----
 
-* BuildEnv.bat has a number of flags which can be set using the format ``-flag@value``
-* Many of the values have defaults, but setting them manually is advised.
+* buildenv.bat has a number of flags which can be set using the format ``-flag@value``
+* Many of the values have defaults, but setting them manually is advised,
+  at least for ``-arch`` and ``-compiler``.
+* For Python development:
+  - You should also set ``-pythonpath``.
+  - For Python development, your choice of compiler
+    must match the compiler used to compile your version of Python.
+    For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``.
+    For older versions of Python, you can try ``mingw``,
+	although your mileage may vary.
+  - ``-arch`` must match the architecture of the Python at ``-pythonpath``.
 * Running buildenv.bat will display the available flags.
-* Running buildenv.bat -help -flag will give more information about that flag
-* Change the Python path to whatever version of Python you have installed.
-* For Python development, your choice of compiler must match the compiler used to compile your version of Python.  For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``.
-  For older versions of Python, you can try ``mingw``, although your mileage may vary.
-* On 32 bit systems, type ``-arch@32`` instead of ``-arch@64``.
-* The -workfolder flag is your working folder,
+* The ``-workfolder`` flag is your working folder,
   either relative to ``C:\Users\<username>``, or absolute.
   If you use eclipse, you may want to type ``workspace``.
 
@@ -50,6 +53,7 @@ Supported Compilers
 ~~~~~~~~~~~~~~~~~~~
 
 * `mingw <http://www.mingw.org/>`_ (32-bit only)
+
 * `Visual C++ 2008 Express <http://go.microsoft.com/?linkid=7729279>`_
   (32-bit and 64-bit).
   For the 64-bit compiler, you also need the
