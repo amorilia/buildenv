@@ -289,15 +289,11 @@ if "%compiler_type%x%arch_type%" == "sdk60x32" goto sdk60x32
 if "%compiler_type%x%arch_type%" == "sdk60x64" goto sdk60x64
 if "%compiler_type%x%arch_type%" == "sdk70x32" goto sdk70x32
 if "%compiler_type%x%arch_type%" == "sdk70x64" goto sdk70x64
+goto compilernotfound
 
 :msvc2008x64
 if not exist "%_msvc2008%\bin\vcvars64.bat" goto compilernotfound
 call "%_msvc2008%\bin\vcvars64.bat"
-goto python_msvc
-
-:msvc2008x64x32
-if not exist "%_msvc2008%\bin\vcvars32.bat" goto compilernotfound
-call "%_msvc2008%\bin\vcvars32.bat"
 goto python_msvc
 
 :msvc2008x32
