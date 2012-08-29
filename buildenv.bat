@@ -24,8 +24,11 @@ echo.Usage: buildenv.bat [options]
 echo.
 echo.Initialize environment for software development.
 echo.
+echo.You are not meant to run this script directly from the Windows explorer.
+echo.See README.rst for installation instructions.
+echo.
 echo.Options:
-echo.  -arch@BITS              compiler BITS architecture: 32, or 64 [default: %arch_type%]
+echo.  -arch@BITS              target BITS architecture: 32, or 64 [default: %arch_type%]
 echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, or mingw
 echo.                          [default: %compiler_type%]
 echo.  -pythonpath@FOLDER      the base FOLDER of your Python installation;
@@ -34,13 +37,15 @@ echo.                          [default: %python_path%]
 echo.  -workfolder@FOLDER      start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH%,
 echo.                          or absolute
 echo.                          [default: %work_folder%]
-echo.  -gitpath@FOLDER         the base FOLDER of your Git installation;
+echo.  -gitpath@FOLDER         the base FOLDER of your msysGit installation;
 echo.                          use this flag when automatic detection fails
 echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
 echo.                          use this flag when automatic detection fails
 echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
 echo.                          use this flag when automatic detection fails
 echo.
+rem Likely, the script was run from Windows explorer...
+pause
 goto end
 
 :checkparams
@@ -388,5 +393,3 @@ set SWITCHPARSE=
 set SWITCH=
 set VALUE=
 set ProgramFiles32=
-
-pause
