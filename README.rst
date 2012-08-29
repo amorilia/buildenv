@@ -14,9 +14,10 @@ Now right-click this newly created shortcut, select **Properties**, and change *
 Notes
 =====
 
-* buildenv.bat has a number of flags which can be set using the format ``-flag@value``
-* Many of the values have defaults, but setting them manually is advised,
-  at least for ``-arch`` and ``-compiler``.
+* buildenv.bat has a number of flags which can be set
+  using the format ``-flag@value``.
+* Many of the values have defaults, however,
+  you should set at least ``-arch`` and ``-compiler``.
 * For Python development:
   - You should also set ``-pythonpath``.
   - For Python development, your choice of compiler
@@ -25,10 +26,15 @@ Notes
     For older versions of Python, you can try ``mingw``,
 	although your mileage may vary.
   - ``-arch`` must match the architecture of the Python at ``-pythonpath``.
-* Running buildenv.bat will display the available flags.
+* Other applications, such as Qt, msysGit, and NSIS, are automatically detected
+  if installed at their default locations.
+  Set the corresponding flags, if detection fails, or if detection picks the wrong
+  version for you (for instance, if you have multiple versions of Qt installed,
+  but you want buildenv.bat to pick a particular one).
+* Running buildenv.bat without arguments will display all available flags.
 * The ``-workfolder`` flag is your working folder,
   either relative to ``C:\Users\<username>``, or absolute.
-  If you use eclipse, you may want to type ``workspace``.
+  If you use eclipse, you may want to type ``-workfolder@workspace``.
 
 Features
 ========
