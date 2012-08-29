@@ -6,10 +6,13 @@ rem *************************
 
 if "%ProgramFiles(x86)%" == "" set arch_type=32
 if not "%ProgramFiles(x86)%" == "" set arch_type=64
+set ProgramFiles32=%ProgramFiles%
+if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 set qt_path=C:\QtSDK
 set python_path=C:\Python32
 set compiler_type=msvc2008
 set work_folder=%HOMEDRIVE%%HOMEPATH%
+set _msvc2008=%ProgramFiles32%\Microsoft Visual Studio 9.0\VC
 
 if "%1" == "-help" goto displayparams
 if "%1" == "--help" goto displayparams
@@ -40,6 +43,9 @@ echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
 echo.                          use this flag when automatic detection fails
 echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
 echo.                          use this flag when automatic detection fails
+echo.  -msvc2008@FOLDER        the base FOLDER of your MSVC 2008 installation;
+echo.                          implies -compiler@msvc2008 when set
+echo.                          [default: %_msvc2008%]
 echo.
 goto end
 
@@ -97,6 +103,13 @@ SHIFT
 goto checkparams
 )
 
+if "%SWITCH%" == "-msvc2008" (
+set _msvc2008=%VALUE%
+set compiler_type=msvc2008
+SHIFT
+goto checkparams
+)
+
 :settings
 rem ********************
 rem *** Architecture ***
@@ -109,8 +122,6 @@ echo.Setting Program Files
 rem Implementation note: do not embed %ProgramFiles32% into brackets
 rem because the brackets will be misinterpreted by the command processor
 rem http://marsbox.com/blog/howtos/batch-file-programfiles-x86-parenthesis-anomaly/
-set ProgramFiles32=%ProgramFiles%
-if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 
 echo.Program Folder:
 echo.  32-bit: %ProgramFiles32%
@@ -280,18 +291,18 @@ if "%compiler_type%x%arch_type%" == "sdk70x32" goto sdk70x32
 if "%compiler_type%x%arch_type%" == "sdk70x64" goto sdk70x64
 
 :msvc2008x64
-if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat" goto compilernotfound
-call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars64.bat"
+if not exist "%_msvc2008%\bin\vcvars64.bat" goto compilernotfound
+call "%_msvc2008%\bin\vcvars64.bat"
 goto python_msvc
 
 :msvc2008x64x32
-if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" goto compilernotfound
-call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
+if not exist "%_msvc2008%\bin\vcvars32.bat" goto compilernotfound
+call "%_msvc2008%\bin\vcvars32.bat"
 goto python_msvc
 
 :msvc2008x32
-if not exist "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" goto compilernotfound
-call "%ProgramFiles32%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat" 
+if not exist "%_msvc2008%\bin\vcvars32.bat" goto compilernotfound
+call "%_msvc2008%\bin\vcvars32.bat"
 goto python_msvc
 
 :sdk60x32
