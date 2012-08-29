@@ -19,6 +19,7 @@ Notes
 * Many of the values have defaults, however,
   you should set at least ``-arch`` and ``-compiler``.
 * For Python development:
+
   - You should also set ``-pythonpath``.
   - For Python development, your choice of compiler
     must match the compiler used to compile your version of Python.
@@ -26,6 +27,7 @@ Notes
     For older versions of Python, you can try ``mingw``,
     although your mileage may vary.
   - ``-arch`` must match the architecture of the Python at ``-pythonpath``.
+
 * Other applications, such as Qt, msysGit, and NSIS, are automatically detected
   if installed at their default locations.
   Set the corresponding flags, if detection fails, or if detection picks the wrong
