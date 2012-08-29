@@ -406,6 +406,7 @@ set qt_path=
 set python_path=
 set nsis_path=
 set work_folder=
+set _msvc2008=
 set SWITCHPARSE=
 set SWITCH=
 set VALUE=
