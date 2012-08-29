@@ -1,7 +1,7 @@
 Buildenv is batch script used to setting up a build environment on Windows.
 
 Installation
-------------
+============
 
 Download and unzip the source .zip file into any location of your choice.
 
@@ -12,7 +12,7 @@ Now right-click this newly created shortcut, select **Properties**, and change *
   %comspec% /k "<path>\buildenv.bat" -pythonpath@C:\Python32 -workfolder@workspace -arch@32
 
 Notes
------
+=====
 
 * buildenv.bat has a number of flags which can be set using the format ``-flag@value``
 * Many of the values have defaults, but setting them manually is advised,
@@ -31,7 +31,7 @@ Notes
   If you use eclipse, you may want to type ``workspace``.
 
 Features
---------
+========
 
 The batch script does the following:
 
@@ -50,7 +50,7 @@ The batch script does the following:
 * Set *GITHOME* to the msysGit folder, and update *PATH*.
 
 Supported Compilers
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 * `mingw <http://www.mingw.org/>`_ (32-bit only)
 
@@ -61,29 +61,29 @@ Supported Compilers
   <http://www.microsoft.com/downloads/details.aspx?FamilyID=c17ba869-9671-4330-a63e-1fd44e0e2505>`_
 
 Supported versions of Blender
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 * 2.57, 2.58, 2.59, 2.60, 2.61, 2.62.
 
 Supported versions of Python
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 * Any. However, for compiling extension modules, only 2.6 and higher
   are well supported.
 
 Supported versions of Qt SDK
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 * Only tested with Qt 4.7.4 with mingw
   (Qt SDK 1.1.4).
 
 Supported versions of NSIS
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 * Any.
 
 Supported versions of Git
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 * `msysGit <http://code.google.com/p/msysgit/>`_.
 
