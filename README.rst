@@ -15,7 +15,8 @@ Notes
 =====
 
 * buildenv.bat has a number of flags which can be set
-  using the format ``-flag@value``.
+  using the format ``-flag@value``,
+  or ``"-flag@value"`` if the value contains spaces.
 * Many of the values have defaults, however,
   you should set at least ``-arch`` and ``-compiler``.
 * For Python development:
