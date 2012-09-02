@@ -52,10 +52,13 @@ echo.                          or absolute
 echo.                          [default: %work_folder%]
 echo.  -gitpath@FOLDER         the base FOLDER of your msysGit installation;
 echo.                          use this flag when automatic detection fails
+echo.                          [default: %git_path%]
 echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
 echo.                          use this flag when automatic detection fails
+echo.                          [default: %qt_path%]
 echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
 echo.                          use this flag when automatic detection fails
+echo.                          [default: %nsis_path%]
 echo.  -msvc2008@FOLDER        the base FOLDER of your MSVC 2008 installation;
 echo.                          implies -compiler@msvc2008 when set
 echo.                          [default: %_msvc2008%]
