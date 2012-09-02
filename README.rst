@@ -7,9 +7,13 @@ Download and unzip the source .zip file into any location of your choice.
 
 Right-click on the ``buildenv.bat`` file, and select **Send to > Desktop (create shortcut)**.
 
-Now right-click this newly created shortcut, select **Properties**, and change **Target** into::
+Now right-click this newly created shortcut, select **Properties**, and change **Target** into
+for instance::
 
-  %comspec% /k "<path>\buildenv.bat" -pythonpath@C:\Python32 -workfolder@workspace -arch@32
+  %comspec% /k "<path>\buildenv.bat" -compiler=msvc2008 -arch@32 -pythonpath@C:\Python32 -workfolder@workspace
+
+With the above,
+you could for instance compile Python 3.2 extension modules targetted at 32 bit.
 
 Notes
 =====

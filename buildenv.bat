@@ -9,11 +9,21 @@ if not "%ProgramFiles(x86)%" == "" set arch_type=64
 set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 set qt_path=C:\QtSDK
-set python_path=C:\Python32
-set compiler_type=msvc2008
 set work_folder=%HOMEDRIVE%%HOMEPATH%
-set _msvc2008=%ProgramFiles32%\Microsoft Visual Studio 9.0\VC
+FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
+if not "%_msvc2008%" == "" set compiler_type=msvc2008
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.7\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.0\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
 
+:helpcheck
 if "%1" == "-help" goto displayparams
 if "%1" == "--help" goto displayparams
 if "%1" == "-h" goto displayparams
@@ -42,10 +52,13 @@ echo.                          or absolute
 echo.                          [default: %work_folder%]
 echo.  -gitpath@FOLDER         the base FOLDER of your msysGit installation;
 echo.                          use this flag when automatic detection fails
+echo.                          [default: %git_path%]
 echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
 echo.                          use this flag when automatic detection fails
+echo.                          [default: %qt_path%]
 echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
 echo.                          use this flag when automatic detection fails
+echo.                          [default: %nsis_path%]
 echo.  -msvc2008@FOLDER        the base FOLDER of your MSVC 2008 installation;
 echo.                          implies -compiler@msvc2008 when set
 echo.                          [default: %_msvc2008%]
@@ -184,10 +197,7 @@ rem **********
 :python
 echo.
 echo.Setting Python Environment
-if exist "%python_path%\python.exe" (
-  set python_path=%python_path%
-  goto pythonfound
-)
+if exist "%python_path%\python.exe" goto pythonfound
 goto pythonnotfound
 
 :pythonfound
