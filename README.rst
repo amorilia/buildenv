@@ -9,7 +9,7 @@ Right-click on the ``buildenv.bat`` file, and select **Send to > Desktop (create
 
 Now right-click this newly created shortcut, select **Properties**, and change **Target** into::
 
-  %comspec% /k "<path>\buildenv.bat" -pythonpath@C:\Python32 -workfolder@workspace -arch@32
+  %comspec% /k "<path>\buildenv.bat" -workfolder@workspace
 
 Notes
 =====

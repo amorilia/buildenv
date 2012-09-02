@@ -9,11 +9,37 @@ if not "%ProgramFiles(x86)%" == "" set arch_type=64
 set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 set qt_path=C:\QtSDK
-set python_path=C:\Python32
-set compiler_type=msvc2008
 set work_folder=%HOMEDRIVE%%HOMEPATH%
-set _msvc2008=%ProgramFiles32%\Microsoft Visual Studio 9.0\VC
+FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0') do (
+set _msvc2008=%%B
+set compiler_type=msvc2008
+)
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve') do (
+set python_path=%%B
+)
 
+if "%arch_type" == 64 goto default64
+if "%arch_type" == 32 goto default32
+
+:default64
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation') do (
+set git_path=%%B
+)
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve') do (
+set nsis_path=%%B
+)
+goto helpcheck
+
+:default32
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation') do (
+set git_path=%%B
+)
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\NSIS" /ve') do (
+set nsis_path=%%B
+)
+
+
+:helpcheck
 if "%1" == "-help" goto displayparams
 if "%1" == "--help" goto displayparams
 if "%1" == "-h" goto displayparams
@@ -220,8 +246,7 @@ rem **********
 :python
 echo.
 echo.Setting Python Environment
-if exist "%python_path%\python.exe" (
-  set python_path=%python_path%
+if exist "%python_path%python.exe" (
   goto pythonfound
 )
 goto pythonnotfound
