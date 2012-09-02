@@ -57,7 +57,8 @@ goto end
 :checkparams
 rem grab the first variable
 
-set SWITCHPARSE=%1
+rem %~1 removes quotes, handy if you pass stuff with spaces in
+set SWITCHPARSE=%~1
 if "%SWITCHPARSE%" == "" goto settings
 
 rem implementation note:
