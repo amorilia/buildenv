@@ -230,9 +230,7 @@ rem **********
 :python
 echo.
 echo.Setting Python Environment
-if exist "%python_path%python.exe" (
-  goto pythonfound
-)
+if exist "%python_path%\python.exe" goto pythonfound
 goto pythonnotfound
 
 :pythonfound
