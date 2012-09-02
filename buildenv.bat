@@ -67,54 +67,17 @@ rem can't use : as delimiter because that's a common symbol in absolute paths
 rem so we use @
 for /F "tokens=1,2 delims=@" %%a IN ("%SWITCHPARSE%") DO SET SWITCH=%%a&set VALUE=%%b
 
-if "%SWITCH%" == "-arch" ( 
-set arch_type=%VALUE%
-SHIFT
+if "%SWITCH%" == "-arch" set arch_type=%VALUE%
+if "%SWITCH%" == "-workfolder" set work_folder=%VALUE%
+if "%SWITCH%" == "-pythonpath" set python_path=%VALUE%
+if "%SWITCH%" == "-gitpath" set git_path=%VALUE%
+if "%SWITCH%" == "-compiler" set compiler_type=%VALUE%
+if "%SWITCH%" == "-qtpath" set qt_path=%VALUE%
+if "%SWITCH%" == "-nsispath" set nsis_path=%VALUE%
+if "%SWITCH%" == "-msvc2008" set _msvc2008=%VALUE%
+if "%SWITCH%" == "-msvc2008" set compiler_type=msvc2008
+shift
 goto checkparams
-)
-
-if "%SWITCH%" == "-workfolder" ( 
-set work_folder=%VALUE%
-SHIFT
-goto checkparams
-)
-
-if "%SWITCH%" == "-pythonpath" ( 
-set python_path=%VALUE%
-SHIFT
-goto checkparams
-)
-
-if "%SWITCH%" == "-gitpath" ( 
-set git_path=%VALUE%
-SHIFT
-goto checkparams
-)
-
-if "%SWITCH%" == "-compiler" ( 
-set compiler_type=%VALUE%
-SHIFT
-goto checkparams
-)
-
-if "%SWITCH%" == "-qtpath" ( 
-set qt_path=%VALUE%
-SHIFT
-goto checkparams
-)
-
-if "%SWITCH%" == "-nsispath" ( 
-set nsis_path=%VALUE%
-SHIFT
-goto checkparams
-)
-
-if "%SWITCH%" == "-msvc2008" (
-set _msvc2008=%VALUE%
-set compiler_type=msvc2008
-SHIFT
-goto checkparams
-)
 
 :settings
 rem ********************
