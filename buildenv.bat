@@ -10,34 +10,18 @@ set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 set qt_path=C:\QtSDK
 set work_folder=%HOMEDRIVE%%HOMEPATH%
-FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0') do (
-set _msvc2008=%%B
-set compiler_type=msvc2008
-)
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve') do (
-set python_path=%%B
-)
-
-if "%arch_type" == 64 goto default64
-if "%arch_type" == 32 goto default32
-
-:default64
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation') do (
-set git_path=%%B
-)
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve') do (
-set nsis_path=%%B
-)
-goto helpcheck
-
-:default32
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation') do (
-set git_path=%%B
-)
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\NSIS" /ve') do (
-set nsis_path=%%B
-)
-
+FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0') do set _msvc2008=%%B
+if not "%_msvc2008%" == "" set compiler_type=msvc2008
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.7\InstallPath" /ve') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.0\InstallPath" /ve') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\InstallPath" /ve') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation') do set git_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation') do set git_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\NSIS" /ve') do set nsis_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve') do set nsis_path=%%B
 
 :helpcheck
 if "%1" == "-help" goto displayparams
