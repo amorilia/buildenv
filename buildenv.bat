@@ -65,7 +65,7 @@ rem implementation note:
 rem can't use = as delimiter because anything after = is not passed to buildenv.bat
 rem can't use : as delimiter because that's a common symbol in absolute paths
 rem so we use @
-for /F "tokens=1,2 delims=@ " %%a IN ("%SWITCHPARSE%") DO SET SWITCH=%%a&set VALUE=%%b
+for /F "tokens=1,2 delims=@" %%a IN ("%SWITCHPARSE%") DO SET SWITCH=%%a&set VALUE=%%b
 
 if "%SWITCH%" == "-arch" ( 
 set arch_type=%VALUE%
