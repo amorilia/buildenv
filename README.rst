@@ -61,6 +61,7 @@ The batch script does the following:
 * Set *NSISHOME* according to whatever version of NSIS is found, and
   update *PATH*.
 * Set *GITHOME* to the msysGit folder, and update *PATH*.
+* Set *CMAKEHOME* to the CMake folder, and update *PATH*.
 
 Supported Compilers
 -------------------
@@ -100,3 +101,7 @@ Supported versions of Git
 
 * `msysGit <http://code.google.com/p/msysgit/>`_.
 
+Supported versions of CMake
+---------------------------
+
+* Only tested with CMake 2.8.9.
