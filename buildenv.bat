@@ -20,6 +20,8 @@ FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\I
 FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve 2^> nul') do set python_path=%%B
 FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
 FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
+FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
 FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
 FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
 
@@ -62,6 +64,8 @@ echo.                          [default: %nsis_path%]
 echo.  -msvc2008@FOLDER        the base FOLDER of your MSVC 2008 installation;
 echo.                          implies -compiler@msvc2008 when set
 echo.                          [default: %_msvc2008%]
+echo.  -cmake@FOLDER           the base FOLDER of your CMake installation;
+echo.                          [default: %_cmake%]
 echo.
 rem Likely, the script was run from Windows explorer...
 pause
@@ -87,6 +91,7 @@ if "%SWITCH%" == "-gitpath" set git_path=%VALUE%
 if "%SWITCH%" == "-compiler" set compiler_type=%VALUE%
 if "%SWITCH%" == "-qtpath" set qt_path=%VALUE%
 if "%SWITCH%" == "-nsispath" set nsis_path=%VALUE%
+if "%SWITCH%" == "-cmake" set _cmake=%VALUE%
 if "%SWITCH%" == "-msvc2008" set _msvc2008=%VALUE%
 if "%SWITCH%" == "-msvc2008" set compiler_type=msvc2008
 shift
@@ -188,6 +193,24 @@ if "%GITHOME%" == "" (
 echo.Git home: %GITHOME%
 set PATH=%GITHOME%\bin;%PATH%
 :endgit
+
+rem *************
+rem *** CMake ***
+rem *************
+
+:cmake
+echo.
+echo.Setting CMake Environment
+if exist "%ProgramFiles32%\CMake 2.8\bin\cmake.exe" set CMAKEHOME=%ProgramFiles32%\CMake 2.8
+if exist "%ProgramFiles%\CMake 2.8\cmake.exe" set CMAKEHOME=%ProgramFiles%\CMake 2.8
+if exist "%_cmake%\bin\cmake.exe" set CMAKEHOME=%_cmake%
+if "%CMAKEHOME%" == "" (
+  echo.CMake not found
+  goto endcmake
+)
+echo.CMake home: %CMAKEHOME%
+set PATH=%CMAKEHOME%\bin;%PATH%
+:endcmake
 
 rem **********
 rem *** Qt ***
@@ -381,6 +404,7 @@ set python_path=
 set nsis_path=
 set work_folder=
 set _msvc2008=
+set _cmake=
 set SWITCHPARSE=
 set SWITCH=
 set VALUE=
