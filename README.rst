@@ -74,6 +74,12 @@ Supported Compilers
   `Microsoft Windows SDK for Windows 7 and .NET Framework 3.5 SP1
   <http://www.microsoft.com/downloads/details.aspx?FamilyID=c17ba869-9671-4330-a63e-1fd44e0e2505>`_
 
+* `Visual C++ 2010 Express <http://go.microsoft.com/?linkid=9709949>`_
+  (32-bit and 64-bit).
+  For the 64-bit compiler, you also need the
+  `Microsoft Windows SDK for Windows 7 and .NET Framework 4
+  <http://www.microsoft.com/en-us/download/confirmation.aspx?id=8279>`_
+  
 Supported versions of Blender
 -----------------------------
 
