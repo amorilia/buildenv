@@ -78,8 +78,8 @@ Supported Compilers
   (32-bit and 64-bit).
   For the 64-bit compiler, you also need the
   `Microsoft Windows SDK for Windows 7 and .NET Framework 4
-  <http://www.microsoft.com/en-us/download/confirmation.aspx?id=8279>`_
-  
+  <http://www.microsoft.com/en-gb/download/details.aspx?id=8279>`_
+
 Supported versions of Blender
 -----------------------------
 
