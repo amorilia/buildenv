@@ -47,7 +47,8 @@ echo.See README.rst for installation instructions.
 echo.
 echo.Options:
 echo.  -arch@BITS              target BITS architecture: 32, or 64 [default: %arch_type%]
-echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, msvc2010, mingw, sdk60, sdk70, or sdk71
+echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, msvc2010, mingw,
+echo.                          sdk60, sdk70, or sdk71
 echo.                          [default: %compiler_type%]
 echo.  -pythonpath@FOLDER      the base FOLDER of your Python installation;
 echo.                          its architecture must match BITS
