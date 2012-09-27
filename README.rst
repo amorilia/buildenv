@@ -77,6 +77,7 @@ Supported Compilers
 ``-compiler@sdk70``
   `Microsoft Windows SDK for Windows 7 and .NET Framework 3.5 SP1
   <http://www.microsoft.com/en-us/download/details.aspx?id=3138>`_
+  (32-bit and 64-bit).
   This is SDK is also known as *Windows SDK 7.0*.
   The compilers are identical to the ones that come with Visual C++ 2008.
 
