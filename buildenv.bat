@@ -341,17 +341,13 @@ set LIB="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\lib\x64";%LIB%
 goto python_msvc
 
 :sdk70x32
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin" goto compilernotfound
-set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin";%PATH%
-set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
-set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib";%LIB%
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" goto compilernotfound
+call "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" /x86 /release /xp
 goto python_msvc
 
 :sdk70x64
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64" goto compilernotfound
-set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64";%PATH%
-set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
-set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib\x64";%LIB%
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" goto compilernotfound
+call "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" /x64 /release /xp
 goto python_msvc
 
 :sdk71x32
