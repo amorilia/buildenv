@@ -72,9 +72,13 @@ Supported Compilers
 ``-compiler@msvc2008``
   `Visual C++ 2008 Express <http://go.microsoft.com/?linkid=7729279>`_
   (32-bit and 64-bit).
-  For the 64-bit compiler, you also need the
+  For the 64-bit compiler, you also need the Windows SDK 7.0.
+
+``-compiler@sdk70``
   `Microsoft Windows SDK for Windows 7 and .NET Framework 3.5 SP1
   <http://www.microsoft.com/en-us/download/details.aspx?id=3138>`_
+  This is SDK is also known as *Windows SDK 7.0*.
+  The compilers are identical to the ones that come with Visual C++ 2008.
 
 ``-compiler@msvc2010``
   `Visual C++ 2010 Express <http://go.microsoft.com/?linkid=9709949>`_
