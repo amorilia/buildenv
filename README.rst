@@ -81,6 +81,11 @@ Supported Compilers
   (32-bit).
   If you need to target 64-bit with a Visual C++ 2010 compatible
   compiler, use ``-compiler@sdk71``.
+  You may also want to install
+  `Microsoft Visual Studio 2010 Service Pack 1
+  <http://www.microsoft.com/en-gb/download/details.aspx?id=23691>`_,
+  If you also plan on installing the Windows SDK 7.1,
+  be sure to follow the recommended installation order, documented below.
 
 ``-compiler@sdk71``
   `Microsoft Windows SDK for Windows 7 and .NET Framework 4
