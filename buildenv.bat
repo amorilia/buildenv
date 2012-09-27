@@ -47,7 +47,7 @@ echo.See README.rst for installation instructions.
 echo.
 echo.Options:
 echo.  -arch@BITS              target BITS architecture: 32, or 64 [default: %arch_type%]
-echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, msvc2010, or mingw
+echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, msvc2010, mingw, sdk60, sdk70, or sdk71
 echo.                          [default: %compiler_type%]
 echo.  -pythonpath@FOLDER      the base FOLDER of your Python installation;
 echo.                          its architecture must match BITS
@@ -301,6 +301,8 @@ if "%compiler_type%x%arch_type%" == "sdk60x32" goto sdk60x32
 if "%compiler_type%x%arch_type%" == "sdk60x64" goto sdk60x64
 if "%compiler_type%x%arch_type%" == "sdk70x32" goto sdk70x32
 if "%compiler_type%x%arch_type%" == "sdk70x64" goto sdk70x64
+if "%compiler_type%x%arch_type%" == "sdk71x32" goto sdk71x32
+if "%compiler_type%x%arch_type%" == "sdk71x64" goto sdk71x64
 goto compilernotfound
 
 :msvc2010x64
@@ -349,6 +351,16 @@ if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64" goto comp
 set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64";%PATH%
 set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
 set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib\x64";%LIB%
+goto python_msvc
+
+:sdk71x32
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" goto compilernotfound
+call "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" /x86 /release /xp
+goto python_msvc
+
+:sdk71x64
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" goto compilernotfound
+call "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" /x64 /release /xp
 goto python_msvc
 
 :mingwx32
