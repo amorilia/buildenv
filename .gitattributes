@@ -1,2 +1,5 @@
 *.bat	eol=crlf
-*.rst	eol=text
+*.ini	eol=crlf
+*.rst	text
+.gitattributes	text
+.gitignore	text
