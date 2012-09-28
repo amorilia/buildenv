@@ -62,6 +62,7 @@ The batch script does the following:
   update *PATH*.
 * Set *GITHOME* to the msysGit folder, and update *PATH*.
 * Set *CMAKEHOME* to the CMake folder, and update *PATH*.
+* Set *SWIGHOME* to the SWIG folder, and update *PATH*.
 
 Supported Compilers
 -------------------
@@ -144,3 +145,8 @@ Supported versions of CMake
 ---------------------------
 
 * Only tested with CMake 2.8.9.
+
+Supported versions of SWIG
+--------------------------
+
+* Any.

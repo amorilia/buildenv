@@ -73,6 +73,7 @@ echo.                          implies -compiler@msvc2010 when set
 echo.                          [default: %_msvc2010%]
 echo.  -cmake@FOLDER           the base FOLDER of your CMake installation;
 echo.                          [default: %_cmake%]
+echo.  -swig@FOLDER            the base FOLDER of your SWIG installation
 echo.
 rem Likely, the script was run from Windows explorer...
 pause
@@ -99,6 +100,7 @@ if "%SWITCH%" == "-compiler" set compiler_type=%VALUE%
 if "%SWITCH%" == "-qtpath" set qt_path=%VALUE%
 if "%SWITCH%" == "-nsispath" set nsis_path=%VALUE%
 if "%SWITCH%" == "-cmake" set _cmake=%VALUE%
+if "%SWITCH%" == "-swig" set _swig=%VALUE%
 if "%SWITCH%" == "-msvc2008" set _msvc2008=%VALUE%
 if "%SWITCH%" == "-msvc2008" set compiler_type=msvc2008
 if "%SWITCH%" == "-msvc2010" set _msvc2010=%VALUE%
@@ -220,6 +222,22 @@ if "%CMAKEHOME%" == "" (
 echo.CMake home: %CMAKEHOME%
 set PATH=%CMAKEHOME%\bin;%PATH%
 :endcmake
+
+rem *************
+rem *** SWIG ***
+rem *************
+
+:swig
+echo.
+echo.Setting SWIG Environment
+if exist "%_swig%\swig.exe" set SWIGHOME=%_swig%
+if "%SWIGHOME%" == "" (
+  echo.SWIG not found
+  goto endswig
+)
+echo.SWIG home: %SWIGHOME%
+set PATH=%SWIGHOME%;%PATH%
+:endswig
 
 rem **********
 rem *** Qt ***
@@ -435,6 +453,7 @@ set work_folder=
 set _msvc2008=
 set _msvc2010=
 set _cmake=
+set _swig=
 set SWITCHPARSE=
 set SWITCH=
 set VALUE=
