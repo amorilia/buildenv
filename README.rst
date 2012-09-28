@@ -10,7 +10,14 @@ Right-click on the ``buildenv.bat`` file, and select **Send to > Desktop (create
 Now right-click this newly created shortcut, select **Properties**, and change **Target** into
 for instance::
 
-  %comspec% /k "<path>\buildenv.bat" -compiler=msvc2008 -arch@32 -pythonpath@C:\Python32 -workfolder@workspace
+  %comspec% /k "<path>\buildenv.bat" "<path>\env.ini"
+
+where ``env.ini`` contains for instance::
+
+  compiler=msvc2008
+  arch=32
+  python=C:\Python32
+  start=workspace
 
 With the above,
 you could for instance compile Python 3.2 extension modules targetted at 32 bit.
@@ -18,20 +25,19 @@ you could for instance compile Python 3.2 extension modules targetted at 32 bit.
 Notes
 =====
 
-* buildenv.bat has a number of flags which can be set
-  using the format ``-flag@value``,
-  or ``"-flag@value"`` if the value contains spaces.
+* the ini file has a number of flags which can be set
+  using the format ``flag=value``.
 * Many of the values have defaults, however,
-  you should set at least ``-arch`` and ``-compiler``.
+  usually, you should set at least ``arch`` and ``compiler``.
 * For Python development:
 
-  - You should also set ``-pythonpath``.
+  - You should also set ``python``.
   - For Python development, your choice of compiler
     must match the compiler used to compile your version of Python.
     For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``.
     For older versions of Python, you can try ``mingw``,
     although your mileage may vary.
-  - ``-arch`` must match the architecture of the Python at ``-pythonpath``.
+  - ``arch`` must match the architecture of the Python at ``python``.
 
 * Other applications, such as Qt, msysGit, and NSIS, are automatically detected
   if installed at their default locations.
@@ -39,9 +45,9 @@ Notes
   version for you (for instance, if you have multiple versions of Qt installed,
   but you want buildenv.bat to pick a particular one).
 * Running buildenv.bat without arguments will display all available flags.
-* The ``-workfolder`` flag is your working folder,
+* The ``start`` flag is your working folder,
   either relative to ``C:\Users\<username>``, or absolute.
-  If you use eclipse, you may want to type ``-workfolder@workspace``.
+  If you use eclipse, you may want to type ``start=workspace``.
 
 Features
 ========
@@ -62,26 +68,29 @@ The batch script does the following:
   update *PATH*.
 * Set *GITHOME* to the msysGit folder, and update *PATH*.
 * Set *CMAKEHOME* to the CMake folder, and update *PATH*.
+* Set *SWIGHOME* to the SWIG folder, and update *PATH*.
+* Set *BOOST_INCLUDEDIR* and *BOOST_LIBRARYDIR*
+  according to their corresponding flags.
 
 Supported Compilers
 -------------------
 
-``-compiler@mingw``
+``compiler=mingw``
   `mingw <http://www.mingw.org/>`_ (32-bit only)
 
-``-compiler@msvc2008``
+``compiler=msvc2008``
   `Visual C++ 2008 Express <http://go.microsoft.com/?linkid=7729279>`_
   (32-bit and 64-bit).
   For the 64-bit compiler, you also need the Windows SDK 7.0.
 
-``-compiler@sdk70``
+``compiler=sdk70``
   `Microsoft Windows SDK for Windows 7 and .NET Framework 3.5 SP1
   <http://www.microsoft.com/en-us/download/details.aspx?id=3138>`_
   (32-bit and 64-bit).
   This is SDK is also known as *Windows SDK 7.0*.
   The compilers are identical to the ones that come with Visual C++ 2008.
 
-``-compiler@msvc2010``
+``compiler=msvc2010``
   `Visual C++ 2010 Express <http://go.microsoft.com/?linkid=9709949>`_
   (32-bit only).
   You may also want to install
@@ -94,9 +103,9 @@ Supported Compilers
   essentially due to ``vcvars64.bat`` being missing
   even after installing Windows SDK 7.1.
   If you need to target 64-bit with a Visual C++ 2010 compatible
-  compiler, use ``-compiler@sdk71``.
+  compiler, use ``compiler=sdk71``.
 
-``-compiler@sdk71``
+``compiler=sdk71``
   `Microsoft Windows SDK for Windows 7 and .NET Framework 4
   <http://www.microsoft.com/en-gb/download/details.aspx?id=8279>`_
   (32-bit and 64-bit).
@@ -144,3 +153,8 @@ Supported versions of CMake
 ---------------------------
 
 * Only tested with CMake 2.8.9.
+
+Supported versions of SWIG
+--------------------------
+
+* Any.

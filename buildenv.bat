@@ -38,7 +38,7 @@ if "%1" == "" goto displayparams
 goto checkparams
 
 :displayparams
-echo.Usage: buildenv.bat [options]
+echo.Usage: buildenv.bat ^<settings.ini^>
 echo.
 echo.Initialize environment for software development.
 echo.
@@ -46,65 +46,76 @@ echo.You are not meant to run this script directly from the Windows explorer.
 echo.See README.rst for installation instructions.
 echo.
 echo.Options:
-echo.  -arch@BITS              target BITS architecture: 32, or 64 [default: %arch_type%]
-echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, msvc2010, mingw,
+echo.  arch=BITS               target BITS architecture: 32, or 64 [default: %arch_type%]
+echo.  compiler=COMPILER       COMPILER to set up: msvc2008, msvc2010, mingw,
 echo.                          sdk60, sdk70, or sdk71
 echo.                          [default: %compiler_type%]
-echo.  -pythonpath@FOLDER      the base FOLDER of your Python installation;
+echo.  python=FOLDER           the base FOLDER of your Python installation;
 echo.                          its architecture must match BITS
 echo.                          [default: %python_path%]
-echo.  -workfolder@FOLDER      start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH%,
+echo.  start=FOLDER            start FOLDER, either relative to
+echo.                          %HOMEDRIVE%%HOMEPATH%,
 echo.                          or absolute
 echo.                          [default: %work_folder%]
-echo.  -gitpath@FOLDER         the base FOLDER of your msysGit installation;
+echo.  git=FOLDER              the base FOLDER of your msysGit installation;
 echo.                          use this flag when automatic detection fails
 echo.                          [default: %git_path%]
-echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
+echo.  qt=FOLDER               the base FOLDER of your Qt SDK installation;
 echo.                          use this flag when automatic detection fails
 echo.                          [default: %qt_path%]
-echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
+echo.  nsis=FOLDER             the base FOLDER of your NSIS installation;
 echo.                          use this flag when automatic detection fails
 echo.                          [default: %nsis_path%]
-echo.  -msvc2008@FOLDER        the base FOLDER of your MSVC 2008 installation;
+echo.  msvc2008=FOLDER         the base FOLDER of your MSVC 2008 installation;
 echo.                          implies -compiler@msvc2008 when set
 echo.                          [default: %_msvc2008%]
-echo.  -msvc2010@FOLDER        the base FOLDER of your MSVC 2010 installation;
+echo.  msvc2010=FOLDER         the base FOLDER of your MSVC 2010 installation;
 echo.                          implies -compiler@msvc2010 when set
 echo.                          [default: %_msvc2010%]
-echo.  -cmake@FOLDER           the base FOLDER of your CMake installation;
+echo.  cmake=FOLDER            the base FOLDER of your CMake installation;
 echo.                          [default: %_cmake%]
+echo.  swig=FOLDER             the base FOLDER of your SWIG installation
+echo.  boostinc=FOLDER         the boost include FOLDER
+echo.  boostlib=FOLDER         the boost library FOLDER;
+echo.                          must match compiler and architecture
 echo.
 rem Likely, the script was run from Windows explorer...
 pause
 goto end
 
 :checkparams
-rem grab the first variable
+rem Search the INI file line by line
+if not exist "%~f1" (
+  echo.File "%~f1" not found.
+  goto end
+)
+for /F "tokens=* delims=" %%a in ('type %1') do call :parseparam "%%a"
+goto settings
 
-rem %~1 removes quotes, handy if you pass stuff with spaces in
-set SWITCHPARSE=%~1
-if "%SWITCHPARSE%" == "" goto settings
-
-rem implementation note:
-rem can't use = as delimiter because anything after = is not passed to buildenv.bat
-rem can't use : as delimiter because that's a common symbol in absolute paths
-rem so we use @
-for /F "tokens=1,2 delims=@" %%a IN ("%SWITCHPARSE%") DO SET SWITCH=%%a&set VALUE=%%b
-
-if "%SWITCH%" == "-arch" set arch_type=%VALUE%
-if "%SWITCH%" == "-workfolder" set work_folder=%VALUE%
-if "%SWITCH%" == "-pythonpath" set python_path=%VALUE%
-if "%SWITCH%" == "-gitpath" set git_path=%VALUE%
-if "%SWITCH%" == "-compiler" set compiler_type=%VALUE%
-if "%SWITCH%" == "-qtpath" set qt_path=%VALUE%
-if "%SWITCH%" == "-nsispath" set nsis_path=%VALUE%
-if "%SWITCH%" == "-cmake" set _cmake=%VALUE%
-if "%SWITCH%" == "-msvc2008" set _msvc2008=%VALUE%
-if "%SWITCH%" == "-msvc2008" set compiler_type=msvc2008
-if "%SWITCH%" == "-msvc2010" set _msvc2010=%VALUE%
-if "%SWITCH%" == "-msvc2010" set compiler_type=msvc2010
-shift
-goto checkparams
+:parseparam
+rem Get switch and value, and remove surrounding quotes.
+set _line="%~1"
+for /F "tokens=1,2 delims==" %%a in ('echo.%_line%') do set SWITCH=%%a^"&set VALUE=^"%%b
+set _line=
+set SWITCH=%SWITCH:"=%
+set VALUE=%VALUE:"=%
+echo.Parsing %SWITCH%=%VALUE%
+if "%SWITCH%" == "arch" set arch_type=%VALUE%
+if "%SWITCH%" == "start" set work_folder=%VALUE%
+if "%SWITCH%" == "python" set python_path=%VALUE%
+if "%SWITCH%" == "git" set git_path=%VALUE%
+if "%SWITCH%" == "compiler" set compiler_type=%VALUE%
+if "%SWITCH%" == "qt" set qt_path=%VALUE%
+if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
+if "%SWITCH%" == "cmake" set _cmake=%VALUE%
+if "%SWITCH%" == "swig" set _swig=%VALUE%
+if "%SWITCH%" == "boostinc" set BOOST_INCLUDEDIR=%VALUE%
+if "%SWITCH%" == "boostlib" set BOOST_LIBRARYDIR=%VALUE%
+if "%SWITCH%" == "msvc2008" set _msvc2008=%VALUE%
+if "%SWITCH%" == "msvc2008" set compiler_type=msvc2008
+if "%SWITCH%" == "msvc2010" set _msvc2010=%VALUE%
+if "%SWITCH%" == "msvc2010" set compiler_type=msvc2010
+goto eof
 
 :settings
 rem ********************
@@ -220,6 +231,22 @@ if "%CMAKEHOME%" == "" (
 echo.CMake home: %CMAKEHOME%
 set PATH=%CMAKEHOME%\bin;%PATH%
 :endcmake
+
+rem *************
+rem *** SWIG ***
+rem *************
+
+:swig
+echo.
+echo.Setting SWIG Environment
+if exist "%_swig%\swig.exe" set SWIGHOME=%_swig%
+if "%SWIGHOME%" == "" (
+  echo.SWIG not found
+  goto endswig
+)
+echo.SWIG home: %SWIGHOME%
+set PATH=%SWIGHOME%;%PATH%
+:endswig
 
 rem **********
 rem *** Qt ***
@@ -435,7 +462,10 @@ set work_folder=
 set _msvc2008=
 set _msvc2010=
 set _cmake=
+set _swig=
 set SWITCHPARSE=
 set SWITCH=
 set VALUE=
 set ProgramFiles32=
+
+:eof
