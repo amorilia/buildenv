@@ -38,7 +38,7 @@ if "%1" == "" goto displayparams
 goto checkparams
 
 :displayparams
-echo.Usage: buildenv.bat [options]
+echo.Usage: buildenv.bat ^<settings.ini^>
 echo.
 echo.Initialize environment for software development.
 echo.
@@ -46,36 +46,37 @@ echo.You are not meant to run this script directly from the Windows explorer.
 echo.See README.rst for installation instructions.
 echo.
 echo.Options:
-echo.  -arch@BITS              target BITS architecture: 32, or 64 [default: %arch_type%]
-echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, msvc2010, mingw,
+echo.  arch=BITS               target BITS architecture: 32, or 64 [default: %arch_type%]
+echo.  compiler=COMPILER       COMPILER to set up: msvc2008, msvc2010, mingw,
 echo.                          sdk60, sdk70, or sdk71
 echo.                          [default: %compiler_type%]
-echo.  -pythonpath@FOLDER      the base FOLDER of your Python installation;
+echo.  python=FOLDER           the base FOLDER of your Python installation;
 echo.                          its architecture must match BITS
 echo.                          [default: %python_path%]
-echo.  -workfolder@FOLDER      start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH%,
+echo.  start=FOLDER            start FOLDER, either relative to
+echo.                          %HOMEDRIVE%%HOMEPATH%,
 echo.                          or absolute
 echo.                          [default: %work_folder%]
-echo.  -gitpath@FOLDER         the base FOLDER of your msysGit installation;
+echo.  git=FOLDER              the base FOLDER of your msysGit installation;
 echo.                          use this flag when automatic detection fails
 echo.                          [default: %git_path%]
-echo.  -qtpath@FOLDER          the base FOLDER of your Qt SDK installation;
+echo.  qt=FOLDER               the base FOLDER of your Qt SDK installation;
 echo.                          use this flag when automatic detection fails
 echo.                          [default: %qt_path%]
-echo.  -nsispath@FOLDER        the base FOLDER of your NSIS installation;
+echo.  nsis=FOLDER             the base FOLDER of your NSIS installation;
 echo.                          use this flag when automatic detection fails
 echo.                          [default: %nsis_path%]
-echo.  -msvc2008@FOLDER        the base FOLDER of your MSVC 2008 installation;
+echo.  msvc2008=FOLDER         the base FOLDER of your MSVC 2008 installation;
 echo.                          implies -compiler@msvc2008 when set
 echo.                          [default: %_msvc2008%]
-echo.  -msvc2010@FOLDER        the base FOLDER of your MSVC 2010 installation;
+echo.  msvc2010=FOLDER         the base FOLDER of your MSVC 2010 installation;
 echo.                          implies -compiler@msvc2010 when set
 echo.                          [default: %_msvc2010%]
-echo.  -cmake@FOLDER           the base FOLDER of your CMake installation;
+echo.  cmake=FOLDER            the base FOLDER of your CMake installation;
 echo.                          [default: %_cmake%]
-echo.  -swig@FOLDER            the base FOLDER of your SWIG installation
-echo.  -boostinc@FOLDER        the boost include FOLDER
-echo.  -boostlib@FOLDER        the boost library FOLDER;
+echo.  swig=FOLDER             the base FOLDER of your SWIG installation
+echo.  boostinc=FOLDER         the boost include FOLDER
+echo.  boostlib=FOLDER         the boost library FOLDER;
 echo.                          must match compiler and architecture
 echo.
 rem Likely, the script was run from Windows explorer...
