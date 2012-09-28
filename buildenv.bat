@@ -74,6 +74,9 @@ echo.                          [default: %_msvc2010%]
 echo.  -cmake@FOLDER           the base FOLDER of your CMake installation;
 echo.                          [default: %_cmake%]
 echo.  -swig@FOLDER            the base FOLDER of your SWIG installation
+echo.  -boostinc@FOLDER        the boost include FOLDER
+echo.  -boostlib@FOLDER        the boost library FOLDER;
+echo.                          must match compiler and architecture
 echo.
 rem Likely, the script was run from Windows explorer...
 pause
@@ -101,6 +104,8 @@ if "%SWITCH%" == "-qtpath" set qt_path=%VALUE%
 if "%SWITCH%" == "-nsispath" set nsis_path=%VALUE%
 if "%SWITCH%" == "-cmake" set _cmake=%VALUE%
 if "%SWITCH%" == "-swig" set _swig=%VALUE%
+if "%SWITCH%" == "-boostinc" set BOOST_INCLUDEDIR=%VALUE%
+if "%SWITCH%" == "-boostlib" set BOOST_LIBRARYDIR=%VALUE%
 if "%SWITCH%" == "-msvc2008" set _msvc2008=%VALUE%
 if "%SWITCH%" == "-msvc2008" set compiler_type=msvc2008
 if "%SWITCH%" == "-msvc2010" set _msvc2010=%VALUE%

@@ -63,6 +63,8 @@ The batch script does the following:
 * Set *GITHOME* to the msysGit folder, and update *PATH*.
 * Set *CMAKEHOME* to the CMake folder, and update *PATH*.
 * Set *SWIGHOME* to the SWIG folder, and update *PATH*.
+* Set *BOOST_INCLUDEDIR* and *BOOST_LIBRARYDIR*
+  according to their corresponding flags.
 
 Supported Compilers
 -------------------
