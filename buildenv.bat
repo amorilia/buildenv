@@ -12,6 +12,9 @@ set qt_path=C:\QtSDK
 set work_folder=%HOMEDRIVE%%HOMEPATH%
 FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
 if not "%_msvc2008%" == "" set compiler_type=msvc2008
+FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 10.0 2^> nul') do set _msvc2010=%%B
+if exist "%ProgramFiles32%\Microsoft Visual Studio 10.0\VC" set _msvc2010=%ProgramFiles32%\Microsoft Visual Studio 10.0\VC
+if not "%_msvc2010%" == "" set compiler_type=msvc2010
 FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set python_path=%%B
 FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve 2^> nul') do set python_path=%%B
 FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.7\InstallPath" /ve 2^> nul') do set python_path=%%B
@@ -44,7 +47,8 @@ echo.See README.rst for installation instructions.
 echo.
 echo.Options:
 echo.  -arch@BITS              target BITS architecture: 32, or 64 [default: %arch_type%]
-echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, or mingw
+echo.  -compiler@COMPILER      COMPILER to set up: msvc2008, msvc2010, mingw,
+echo.                          sdk60, sdk70, or sdk71
 echo.                          [default: %compiler_type%]
 echo.  -pythonpath@FOLDER      the base FOLDER of your Python installation;
 echo.                          its architecture must match BITS
@@ -64,6 +68,9 @@ echo.                          [default: %nsis_path%]
 echo.  -msvc2008@FOLDER        the base FOLDER of your MSVC 2008 installation;
 echo.                          implies -compiler@msvc2008 when set
 echo.                          [default: %_msvc2008%]
+echo.  -msvc2010@FOLDER        the base FOLDER of your MSVC 2010 installation;
+echo.                          implies -compiler@msvc2010 when set
+echo.                          [default: %_msvc2010%]
 echo.  -cmake@FOLDER           the base FOLDER of your CMake installation;
 echo.                          [default: %_cmake%]
 echo.
@@ -94,6 +101,8 @@ if "%SWITCH%" == "-nsispath" set nsis_path=%VALUE%
 if "%SWITCH%" == "-cmake" set _cmake=%VALUE%
 if "%SWITCH%" == "-msvc2008" set _msvc2008=%VALUE%
 if "%SWITCH%" == "-msvc2008" set compiler_type=msvc2008
+if "%SWITCH%" == "-msvc2010" set _msvc2010=%VALUE%
+if "%SWITCH%" == "-msvc2010" set compiler_type=msvc2010
 shift
 goto checkparams
 
@@ -283,6 +292,8 @@ rem ***************
 echo.
 echo.Setting Compiler Environment (%compiler_type%, %arch_type% bit)
 
+if "%compiler_type%x%arch_type%" == "msvc2010x32" goto msvc2010x32
+if "%compiler_type%x%arch_type%" == "msvc2010x64" goto msvc2010x64
 if "%compiler_type%x%arch_type%" == "msvc2008x32" goto msvc2008x32
 if "%compiler_type%x%arch_type%" == "msvc2008x64" goto msvc2008x64
 if "%compiler_type%x%arch_type%" == "mingwx32" goto mingwx32
@@ -291,7 +302,19 @@ if "%compiler_type%x%arch_type%" == "sdk60x32" goto sdk60x32
 if "%compiler_type%x%arch_type%" == "sdk60x64" goto sdk60x64
 if "%compiler_type%x%arch_type%" == "sdk70x32" goto sdk70x32
 if "%compiler_type%x%arch_type%" == "sdk70x64" goto sdk70x64
+if "%compiler_type%x%arch_type%" == "sdk71x32" goto sdk71x32
+if "%compiler_type%x%arch_type%" == "sdk71x64" goto sdk71x64
 goto compilernotfound
+
+:msvc2010x64
+if not exist "%_msvc2010%\bin\vcvars64.bat" goto compilernotfound
+call "%_msvc2010%\bin\vcvars64.bat"
+goto python_msvc
+
+:msvc2010x32
+if not exist "%_msvc2010%\bin\vcvars32.bat" goto compilernotfound
+call "%_msvc2010%\bin\vcvars32.bat"
+goto python_msvc
 
 :msvc2008x64
 if not exist "%_msvc2008%\bin\vcvars64.bat" goto compilernotfound
@@ -318,17 +341,23 @@ set LIB="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\lib\x64";%LIB%
 goto python_msvc
 
 :sdk70x32
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin" goto compilernotfound
-set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin";%PATH%
-set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
-set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib";%LIB%
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" goto compilernotfound
+call "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" /x86 /release /xp
 goto python_msvc
 
 :sdk70x64
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64" goto compilernotfound
-set PATH="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\bin\x64";%PATH%
-set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\include";%INCLUDE%
-set LIB="C:\Program Files\Microsoft SDKs\Windows\v7.0\vc\lib\x64";%LIB%
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" goto compilernotfound
+call "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" /x64 /release /xp
+goto python_msvc
+
+:sdk71x32
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" goto compilernotfound
+call "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" /x86 /release /xp
+goto python_msvc
+
+:sdk71x64
+if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" goto compilernotfound
+call "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" /x64 /release /xp
 goto python_msvc
 
 :mingwx32
@@ -404,6 +433,7 @@ set python_path=
 set nsis_path=
 set work_folder=
 set _msvc2008=
+set _msvc2010=
 set _cmake=
 set SWITCHPARSE=
 set SWITCH=

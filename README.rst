@@ -66,13 +66,52 @@ The batch script does the following:
 Supported Compilers
 -------------------
 
-* `mingw <http://www.mingw.org/>`_ (32-bit only)
+``-compiler@mingw``
+  `mingw <http://www.mingw.org/>`_ (32-bit only)
 
-* `Visual C++ 2008 Express <http://go.microsoft.com/?linkid=7729279>`_
+``-compiler@msvc2008``
+  `Visual C++ 2008 Express <http://go.microsoft.com/?linkid=7729279>`_
   (32-bit and 64-bit).
-  For the 64-bit compiler, you also need the
+  For the 64-bit compiler, you also need the Windows SDK 7.0.
+
+``-compiler@sdk70``
   `Microsoft Windows SDK for Windows 7 and .NET Framework 3.5 SP1
-  <http://www.microsoft.com/downloads/details.aspx?FamilyID=c17ba869-9671-4330-a63e-1fd44e0e2505>`_
+  <http://www.microsoft.com/en-us/download/details.aspx?id=3138>`_
+  (32-bit and 64-bit).
+  This is SDK is also known as *Windows SDK 7.0*.
+  The compilers are identical to the ones that come with Visual C++ 2008.
+
+``-compiler@msvc2010``
+  `Visual C++ 2010 Express <http://go.microsoft.com/?linkid=9709949>`_
+  (32-bit only).
+  You may also want to install
+  `Microsoft Visual Studio 2010 Service Pack 1
+  <http://www.microsoft.com/en-gb/download/details.aspx?id=23691>`_.
+  If you also plan on installing the Windows SDK 7.1,
+  be sure to follow the recommended installation order, documented below.
+
+  The 64-bit target is not supported,
+  essentially due to ``vcvars64.bat`` being missing
+  even after installing Windows SDK 7.1.
+  If you need to target 64-bit with a Visual C++ 2010 compatible
+  compiler, use ``-compiler@sdk71``.
+
+``-compiler@sdk71``
+  `Microsoft Windows SDK for Windows 7 and .NET Framework 4
+  <http://www.microsoft.com/en-gb/download/details.aspx?id=8279>`_
+  (32-bit and 64-bit).
+  This is SDK is also known as *Windows SDK 7.1*.
+  The compilers are identical to the ones that come with Visual C++ 2010.
+  You may also need
+  `Microsoft Visual C++ 2010 Service Pack 1 Compiler Update for the Windows SDK 7.1
+  <http://www.microsoft.com/en-us/download/details.aspx?id=4422>`_
+  in case you have Visual C++ 2010 SP1.
+  Note the recommended installation order according to Microsoft:
+
+  1. Visual Studio 2010
+  2. Windows SDK 7.1
+  3. Visual Studio 2010 SP1
+  4. Visual C++ 2010 SP1 Compiler Update for the Windows SDK 7.1
 
 Supported versions of Blender
 -----------------------------
