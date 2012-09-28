@@ -84,35 +84,38 @@ pause
 goto end
 
 :checkparams
-rem grab the first variable
+rem Search the INI file line by line
+if not exist "%~f1" (
+  echo.File "%~f1" not found.
+  goto end
+)
+for /F "tokens=* delims=" %%a in ('type %1') do call :parseparam "%%a"
+goto settings
 
-rem %~1 removes quotes, handy if you pass stuff with spaces in
-set SWITCHPARSE=%~1
-if "%SWITCHPARSE%" == "" goto settings
-
-rem implementation note:
-rem can't use = as delimiter because anything after = is not passed to buildenv.bat
-rem can't use : as delimiter because that's a common symbol in absolute paths
-rem so we use @
-for /F "tokens=1,2 delims=@" %%a IN ("%SWITCHPARSE%") DO SET SWITCH=%%a&set VALUE=%%b
-
-if "%SWITCH%" == "-arch" set arch_type=%VALUE%
-if "%SWITCH%" == "-workfolder" set work_folder=%VALUE%
-if "%SWITCH%" == "-pythonpath" set python_path=%VALUE%
-if "%SWITCH%" == "-gitpath" set git_path=%VALUE%
-if "%SWITCH%" == "-compiler" set compiler_type=%VALUE%
-if "%SWITCH%" == "-qtpath" set qt_path=%VALUE%
-if "%SWITCH%" == "-nsispath" set nsis_path=%VALUE%
-if "%SWITCH%" == "-cmake" set _cmake=%VALUE%
-if "%SWITCH%" == "-swig" set _swig=%VALUE%
-if "%SWITCH%" == "-boostinc" set BOOST_INCLUDEDIR=%VALUE%
-if "%SWITCH%" == "-boostlib" set BOOST_LIBRARYDIR=%VALUE%
-if "%SWITCH%" == "-msvc2008" set _msvc2008=%VALUE%
-if "%SWITCH%" == "-msvc2008" set compiler_type=msvc2008
-if "%SWITCH%" == "-msvc2010" set _msvc2010=%VALUE%
-if "%SWITCH%" == "-msvc2010" set compiler_type=msvc2010
-shift
-goto checkparams
+:parseparam
+rem Get switch and value, and remove surrounding quotes.
+set _line="%~1"
+for /F "tokens=1,2 delims==" %%a in ('echo.%_line%') do set SWITCH=%%a^"&set VALUE=^"%%b
+set _line=
+set SWITCH=%SWITCH:"=%
+set VALUE=%VALUE:"=%
+echo.Parsing %SWITCH%=%VALUE%
+if "%SWITCH%" == "arch" set arch_type=%VALUE%
+if "%SWITCH%" == "start" set work_folder=%VALUE%
+if "%SWITCH%" == "python" set python_path=%VALUE%
+if "%SWITCH%" == "git" set git_path=%VALUE%
+if "%SWITCH%" == "compiler" set compiler_type=%VALUE%
+if "%SWITCH%" == "qt" set qt_path=%VALUE%
+if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
+if "%SWITCH%" == "cmake" set _cmake=%VALUE%
+if "%SWITCH%" == "swig" set _swig=%VALUE%
+if "%SWITCH%" == "boostinc" set BOOST_INCLUDEDIR=%VALUE%
+if "%SWITCH%" == "boostlib" set BOOST_LIBRARYDIR=%VALUE%
+if "%SWITCH%" == "msvc2008" set _msvc2008=%VALUE%
+if "%SWITCH%" == "msvc2008" set compiler_type=msvc2008
+if "%SWITCH%" == "msvc2010" set _msvc2010=%VALUE%
+if "%SWITCH%" == "msvc2010" set compiler_type=msvc2010
+goto eof
 
 :settings
 rem ********************
@@ -464,3 +467,5 @@ set SWITCHPARSE=
 set SWITCH=
 set VALUE=
 set ProgramFiles32=
+
+:eof
