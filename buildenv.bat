@@ -110,7 +110,9 @@ if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
 if "%SWITCH%" == "boostinc" set BOOST_INCLUDEDIR=%VALUE%
+rem also add boostlib to path so dlls are found
 if "%SWITCH%" == "boostlib" set BOOST_LIBRARYDIR=%VALUE%
+if "%SWITCH%" == "boostlib" set PATH=%VALUE%;%PATH%
 if "%SWITCH%" == "msvc2008" set _msvc2008=%VALUE%
 if "%SWITCH%" == "msvc2008" set compiler_type=msvc2008
 if "%SWITCH%" == "msvc2010" set _msvc2010=%VALUE%
