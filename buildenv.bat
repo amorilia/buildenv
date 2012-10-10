@@ -13,7 +13,7 @@ set qt_path=C:\QtSDK
 
 set work_folder=%HOMEDRIVE%%HOMEPATH%
 
-set reg_exe=%HOMEDRIVE%\Windows\Systems32\reg.exe
+set reg_exe=reg.exe
 
 FOR /F "tokens=2*" %%A IN ('%reg_exe% QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
 if not "%_msvc2008%" == "" set compiler_type=msvc2008
@@ -56,39 +56,58 @@ echo.You are not meant to run this script directly from the Windows explorer.
 echo.See README.rst for installation instructions.
 echo.
 echo.Options:
-echo.  arch=BITS               target BITS architecture: 32, or 64 [default: %arch_type%]
-echo.  compiler=COMPILER       COMPILER to set up: msvc2008, msvc2010, mingw,
-echo.                          sdk60, sdk70, or sdk71
-echo.                          [default: %compiler_type%]
-echo.  python=FOLDER           the base FOLDER of your Python installation;
-echo.                          its architecture must match BITS
-echo.                          [default: %python_path%]
+
 echo.  start=FOLDER            start FOLDER, either relative to
 echo.                          %HOMEDRIVE%%HOMEPATH%,
 echo.                          or absolute
 echo.                          [default: %work_folder%]
+
+echo.  arch=BITS               target BITS architecture: 32, or 64 [default: %arch_type%]
+
+echo.  compiler=COMPILER       COMPILER to set up: msvc2008, msvc2010, mingw,
+echo.                          sdk60, sdk70, or sdk71
+echo.                          [default: %compiler_type%]
+
+rem Utilities
+
 echo.  git=FOLDER              the base FOLDER of your msysGit installation;
 echo.                          use this flag when automatic detection fails
 echo.                          [default: %git_path%]
-echo.  qt=FOLDER               the base FOLDER of your Qt SDK installation;
-echo.                          use this flag when automatic detection fails
-echo.                          [default: %qt_path%]
+
 echo.  nsis=FOLDER             the base FOLDER of your NSIS installation;
 echo.                          use this flag when automatic detection fails
 echo.                          [default: %nsis_path%]
+
+echo.  cmake=FOLDER            the base FOLDER of your CMake installation;
+echo.                          [default: %_cmake%]
+
+rem Langs
+
+echo.  python=FOLDER           the base FOLDER of your Python installation;
+echo.                          its architecture must match BITS
+echo.                          [default: %python_path%]
+
+rem compilers
+
 echo.  msvc2008=FOLDER         the base FOLDER of your MSVC 2008 installation;
 echo.                          implies -compiler@msvc2008 when set
 echo.                          [default: %_msvc2008%]
+
 echo.  msvc2010=FOLDER         the base FOLDER of your MSVC 2010 installation;
 echo.                          implies -compiler@msvc2010 when set
 echo.                          [default: %_msvc2010%]
-echo.  cmake=FOLDER            the base FOLDER of your CMake installation;
-echo.                          [default: %_cmake%]
+
+echo.  qt=FOLDER               the base FOLDER of your Qt SDK installation;
+echo.                          use this flag when automatic detection fails
+echo.                          [default: %qt_path%]
+
 echo.  swig=FOLDER             the base FOLDER of your SWIG installation
+
 echo.  boostinc=FOLDER         the boost include FOLDER
 echo.  boostlib=FOLDER         the boost library FOLDER;
 echo.                          must match compiler and architecture
 echo.
+
 rem Likely, the script was run from Windows explorer...
 pause
 goto end
