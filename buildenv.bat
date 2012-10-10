@@ -133,6 +133,7 @@ rem ********************
 rem *** Architecture ***
 rem ********************
 
+echo.
 echo.Script Running:
 echo.
 echo.Setting Program Files
