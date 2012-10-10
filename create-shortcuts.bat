@@ -8,8 +8,8 @@ goto run_script
 )
 
 rem check params
-if exist "%1%" ( 
-set cscript_path=%1%
+if exist "%1" ( 
+set cscript_path=%1
 echo.Found Cscript.exe
 goto run_script
 )

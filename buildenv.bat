@@ -13,7 +13,7 @@ set qt_path=C:\QtSDK
 
 set work_folder=%HOMEDRIVE%%HOMEPATH%
 
-set reg_exe=reg.exe
+set reg_exe=%HOMEDRIVE%\Windows\Systems32\reg.exe
 
 FOR /F "tokens=2*" %%A IN ('%reg_exe% QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
 if not "%_msvc2008%" == "" set compiler_type=msvc2008
