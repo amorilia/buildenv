@@ -8,25 +8,34 @@ if "%ProgramFiles(x86)%" == "" set arch_type=32
 if not "%ProgramFiles(x86)%" == "" set arch_type=64
 set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
+
 set qt_path=C:\QtSDK
+
 set work_folder=%HOMEDRIVE%%HOMEPATH%
-FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
+
+set reg_exe=%HOMEDRIVE%\Windows\Systems32\reg.exe
+FOR /F "tokens=2*" %%A IN ('%reg_exe% QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
 if not "%_msvc2008%" == "" set compiler_type=msvc2008
-FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 10.0 2^> nul') do set _msvc2010=%%B
+
+FOR /F "tokens=2*" %%A IN ('%reg_exe% QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 10.0 2^> nul') do set _msvc2010=%%B
 if exist "%ProgramFiles32%\Microsoft Visual Studio 10.0\VC" set _msvc2010=%ProgramFiles32%\Microsoft Visual Studio 10.0\VC
 if not "%_msvc2010%" == "" set compiler_type=msvc2010
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\2.7\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.0\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
-FOR /F "tokens=2*" %%A in ('REG.EXE QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
+
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Python\PythonCore\2.7\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Python\PythonCore\3.0\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve 2^> nul') do set python_path=%%B
+
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
+
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
+
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
+FOR /F "tokens=2*" %%A in ('%reg_exe% QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
 
 :helpcheck
 if "%1" == "-help" goto displayparams
@@ -150,7 +159,7 @@ rem ***************
 :blender
 echo.
 echo.Setting Blender Environment
-FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir') do (
+FOR /F "tokens=2*" %%A IN ('%reg_exe% QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir') do (
   set BLENDERHOME=%%B
 )
 if "%BLENDERHOME%" == "" (
