@@ -479,5 +479,6 @@ set SWITCHPARSE=
 set SWITCH=
 set VALUE=
 set ProgramFiles32=
+set reg_exe=
 
 :eof
