@@ -503,5 +503,6 @@ set SWITCHPARSE=
 set SWITCH=
 set VALUE=
 set ProgramFiles32=
+set blender=
 
 :eof
