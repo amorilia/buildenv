@@ -162,7 +162,7 @@ Supported Compilers
 
 Supported versions of Blender
 -----------------------------
-``BLENDERHOME=FOLDER``
+``blender=FOLDER``
 * Supported version - 2.62, 2.63, 2.64, 2.65, 2.66, 2.67.
 * Will detect the addon location, either local blender folder or users appdata folder.
 

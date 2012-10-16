@@ -81,7 +81,7 @@ echo.  python=FOLDER           [default: %python_path%]
 
 rem Progs
 echo.Programs:
-echo.  BLENDERHOME=FOLDER      [default: %BLENDERHOME%]
+echo.  blender=FOLDER      [default: %BLENDERHOME%]
 
 rem Utilities
 echo.Utilities:
