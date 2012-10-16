@@ -488,21 +488,27 @@ rem **************
 rem ** Clean Up **
 rem **************
 
-set arch_type=
-set compiler_type=
-set git_path=
-set qt_path=
-set python_path=
-set nsis_path=
+set ProgramFiles32=
 set work_folder=
+set arch_type=
+
+set compiler_type=
 set _msvc2008=
 set _msvc2010=
+
+set blender=
+
+set python_path=
+
+set git_path=
+set nsis_path=
+
+set qt_path=
 set _cmake=
 set _swig=
+
 set SWITCHPARSE=
 set SWITCH=
 set VALUE=
-set ProgramFiles32=
-set blender=
 
 :eof
