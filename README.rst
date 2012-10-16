@@ -3,32 +3,70 @@ Buildenv is batch script used to set up a build environment on Windows.
 Installation
 ============
 
-Download and unzip the source .zip file into any location of your choice.
+* Download and unzip the source .zip file into any location of your choice.
 
-Right-click on the ``buildenv.bat`` file, and select **Send to > Desktop (create shortcut)**.
+Usage
+=====
 
-Now right-click this newly created shortcut, select **Properties**, and change **Target** into
-for instance::
+* Build Env is used to setup a console window with pre-defined environmental setting.
 
-  %comspec% /k "<path>\buildenv.bat" "<path>\env.ini"
+* These setting are for the console session only to avoid PATH pollution and avoids manually setting on each use.
 
-where ``env.ini`` contains for instance::
+* The setting are read from a .ini file created by the user in the ./ini folder.
 
-  compiler=msvc2008
-  arch=32
-  python=C:\Python32
-  start=workspace
+* Running create-shortcut creates separate buildenv shortcuts on your desktop.
 
-With the above,
-you could for instance compile Python 3.2 extension modules targetted at 32 bit.
+* Running the shortcut will call buildenv, passing the specific .ini setting, with a resulting console window.
+
+INI Settings
+============
+
+* Add the relvant options, based on the following to an .ini file placed in the ./ini folder
+
+* The ini file has a number of flags which can be set using the format ``flag=value``.
+
+Misc:
+  start=FOLDER            start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH% or absolute 
+
+  arch=BITS               target BITS architecture: 32, or 64
+
+Languages:
+  python=FOLDER           the base FOLDER of your Python installation; its architecture must match BITS
+
+Progs:
+  BLENDERHOME=FOLDER      the base FOLDER of your Blender installation;
+
+Utilities:
+  git=FOLDER              the base FOLDER of your msysGit installation; use this flag when automatic detection fails
+
+  nsis=FOLDER             the base FOLDER of your NSIS installation; use this flag when automatic detection fails
+
+  cmake=FOLDER            the base FOLDER of your CMake installation;
+
+Compilers:
+  compiler=COMPILER       COMPILER to set up: msvc2008, msvc2010, mingw, sdk60, sdk70, or sdk71
+
+  msvc2008=FOLDER         the base FOLDER of your MSVC 2008 installation; implies compiler=msvc2008 when set
+
+  msvc2010=FOLDER         the base FOLDER of your MSVC 2010 installation; implies compiler=msvc2010 when set
+
+Librarys:
+  swig=FOLDER             the base FOLDER of your SWIG installation
+
+  boostinc=FOLDER         the boost include FOLDER
+  
+  boostlib=FOLDER         the boost library FOLDER; must match compiler and architecture
+
+  qt=FOLDER               the base FOLDER of your Qt SDK installation;
+                          use this flag when automatic detection fails
+
 
 Notes
 =====
+* Running buildenv.bat from command-line will display the auto-detected values.
 
-* the ini file has a number of flags which can be set
-  using the format ``flag=value``.
-* Many of the values have defaults, however,
-  usually, you should set at least ``arch`` and ``compiler``.
+* Many of the values have defaults, however you should set at least ``arch`` and ``compiler``.
+  
 * For Python development:
 
   - You should also set ``python``.
@@ -44,7 +82,9 @@ Notes
   Set the corresponding flags, if detection fails, or if detection picks the wrong
   version for you (for instance, if you have multiple versions of Qt installed,
   but you want buildenv.bat to pick a particular one).
+  
 * Running buildenv.bat without arguments will display all available flags.
+
 * The ``start`` flag is your working folder,
   either relative to ``C:\Users\<username>``, or absolute.
   If you use eclipse, you may want to type ``start=workspace``.
@@ -54,23 +94,21 @@ Features
 
 The batch script does the following:
 
-* Update *PATH* for the specified version of Python.
-* Update *PATH*, *INCLUDE*, and *LIB* for the specified compiler.
-* Update Python's ``distutils.cfg`` to use the specified compiler.
-* Set *PYTHONFOLDER* to the folder where the specified version of
-  Python resides.
-* Set *BLENDERHOME*, *BLENDERVERSION*, *BLENDERADDONS*,
+* Updates *PATH* for the specified version of Python.
+* Updates *PATH*, *INCLUDE*, and *LIB* for the specified compiler.
+* Updates Python's ``distutils.cfg`` to use the specified compiler.
+* Sets *PYTHONFOLDER* to the folder where the specified version of Python resides.
+* Sets *BLENDERHOME*, *BLENDERVERSION*, *BLENDERADDONS*,
   and *APPDATABLENDERADDONS* according
   to whatever version of Blender is found via the registry.
-* Set *QTHOME*, *QTVERSION*, and *QTDIR* according to whatever version
+* Sets *QTHOME*, *QTVERSION*, and *QTDIR* according to whatever version
   of the Qt SDK is found, and update *PATH*.
-* Set *NSISHOME* according to whatever version of NSIS is found, and
+* Sets *NSISHOME* according to whatever version of NSIS is found, and
   update *PATH*.
-* Set *GITHOME* to the msysGit folder, and update *PATH*.
-* Set *CMAKEHOME* to the CMake folder, and update *PATH*.
-* Set *SWIGHOME* to the SWIG folder, and update *PATH*.
-* Set *BOOST_INCLUDEDIR* and *BOOST_LIBRARYDIR*
-  according to their corresponding flags.
+* Sets *GITHOME* to the msysGit folder, and update *PATH*.
+* Sets *CMAKEHOME* to the CMake folder, and update *PATH*.
+* Sets *SWIGHOME* to the SWIG folder, and update *PATH*.
+* Sets *BOOST_INCLUDEDIR* and *BOOST_LIBRARYDIR* according to their corresponding flags.
 
 Supported Compilers
 -------------------
@@ -124,8 +162,10 @@ Supported Compilers
 
 Supported versions of Blender
 -----------------------------
+``blender=FOLDER``
+* Supported version - 2.62, 2.63, 2.64, 2.65, 2.66, 2.67.
+* Will detect the addon location, either local blender folder or users appdata folder.
 
-* 2.57, 2.58, 2.59, 2.60, 2.61, 2.62.
 
 Supported versions of Python
 ----------------------------

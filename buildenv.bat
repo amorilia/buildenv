@@ -9,13 +9,11 @@ if not "%ProgramFiles(x86)%" == "" set arch_type=64
 set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 
-set qt_path=C:\QtSDK
+
 
 set work_folder=%HOMEDRIVE%%HOMEPATH%
 
-rem make sure we find reg.exe on XP
-set PATH=%PATH%;%HOMEDRIVE%\Windows\Systems32
-
+rem compilers
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
 if not "%_msvc2008%" == "" set compiler_type=msvc2008
 
@@ -23,6 +21,7 @@ FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\
 if exist "%ProgramFiles32%\Microsoft Visual Studio 10.0\VC" set _msvc2010=%ProgramFiles32%\Microsoft Visual Studio 10.0\VC
 if not "%_msvc2010%" == "" set compiler_type=msvc2010
 
+rem langs
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set python_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve 2^> nul') do set python_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.7\InstallPath" /ve 2^> nul') do set python_path=%%B
@@ -30,6 +29,10 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.0\I
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\InstallPath" /ve 2^> nul') do set python_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve 2^> nul') do set python_path=%%B
 
+rem programs
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir' 2^> nul') do set BLENDERHOME=%%B
+
+rem utilities
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
 
@@ -39,75 +42,71 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMa
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
 
+rem Libraries
+if exist "C:\QtSDK" set qt_path=C:\QtSDK
+
+
+
+rem *************
+rem ** Runtime **
+rem *************
+
+if "%1" == "" (
+start notepad.exe README.rst
+goto displayparams
+)
+
 :helpcheck
 if "%1" == "-help" goto displayparams
 if "%1" == "--help" goto displayparams
 if "%1" == "-h" goto displayparams
 if "%1" == "/h" goto displayparams
 if "%1" == "/?" goto displayparams
-if "%1" == "" goto displayparams
 goto checkparams
 
 :displayparams
 echo.Usage: buildenv.bat ^<settings.ini^>
 echo.
-echo.Initialize environment for software development.
+echo.Initializes environment for software development.
 echo.
-echo.You are not meant to run this script directly from the Windows explorer.
-echo.See README.rst for installation instructions.
-echo.
-echo.Options:
+echo.Auto-detected Locations:
 
-echo.  start=FOLDER            start FOLDER, either relative to
-echo.                          %HOMEDRIVE%%HOMEPATH%,
-echo.                          or absolute
-echo.                          [default: %work_folder%]
+rem Misc
+echo.  start=FOLDER            [default: %work_folder%]
+echo.  arch=BITS               [default: %arch_type%]
 
-echo.  arch=BITS               target BITS architecture: 32, or 64 [default: %arch_type%]
+rem Lang
+echo.Languages:
+echo.  python=FOLDER           [default: %python_path%]
 
-echo.  compiler=COMPILER       COMPILER to set up: msvc2008, msvc2010, mingw,
-echo.                          sdk60, sdk70, or sdk71
-echo.                          [default: %compiler_type%]
+rem Progs
+echo.Programs:
+echo.  blender=FOLDER      [default: %BLENDERHOME%]
 
 rem Utilities
+echo.Utilities:
+echo.  git=FOLDER              [default: %git_path%]
 
-echo.  git=FOLDER              the base FOLDER of your msysGit installation;
-echo.                          use this flag when automatic detection fails
-echo.                          [default: %git_path%]
+echo.  nsis=FOLDER             [default: %nsis_path%]
 
-echo.  nsis=FOLDER             the base FOLDER of your NSIS installation;
-echo.                          use this flag when automatic detection fails
-echo.                          [default: %nsis_path%]
-
-echo.  cmake=FOLDER            the base FOLDER of your CMake installation;
-echo.                          [default: %_cmake%]
-
-rem Langs
-
-echo.  python=FOLDER           the base FOLDER of your Python installation;
-echo.                          its architecture must match BITS
-echo.                          [default: %python_path%]
+echo.  cmake=FOLDER            [default: %_cmake%]
 
 rem compilers
+echo.Compilers:
+echo.  compiler=COMPILER       [default: %compiler_type%]
 
-echo.  msvc2008=FOLDER         the base FOLDER of your MSVC 2008 installation;
-echo.                          implies -compiler@msvc2008 when set
-echo.                          [default: %_msvc2008%]
+echo.  msvc2008=FOLDER         [default: %_msvc2008%]
 
-echo.  msvc2010=FOLDER         the base FOLDER of your MSVC 2010 installation;
-echo.                          implies -compiler@msvc2010 when set
-echo.                          [default: %_msvc2010%]
+echo.  msvc2010=FOLDER         [default: %_msvc2010%]
 
-echo.  qt=FOLDER               the base FOLDER of your Qt SDK installation;
-echo.                          use this flag when automatic detection fails
-echo.                          [default: %qt_path%]
+rem libs
+echo.Libraries:
+echo.  swig=FOLDER             [default: %swig%]
 
-echo.  swig=FOLDER             the base FOLDER of your SWIG installation
+echo.  boostinc=FOLDER         [default: %boostinc%]
+echo.  boostlib=FOLDER         [default: %boostlib%]
 
-echo.  boostinc=FOLDER         the boost include FOLDER
-echo.  boostlib=FOLDER         the boost library FOLDER;
-echo.                          must match compiler and architecture
-echo.
+echo.  qt=FOLDER               [default: %qt_path%]
 
 rem Likely, the script was run from Windows explorer...
 pause
@@ -130,23 +129,29 @@ set _line=
 set SWITCH=%SWITCH:"=%
 set VALUE=%VALUE:"=%
 echo.Parsing %SWITCH%=%VALUE%
-if "%SWITCH%" == "arch" set arch_type=%VALUE%
 if "%SWITCH%" == "start" set work_folder=%VALUE%
-if "%SWITCH%" == "python" set python_path=%VALUE%
-if "%SWITCH%" == "git" set git_path=%VALUE%
+
+if "%SWITCH%" == "arch" set arch_type=%VALUE%
 if "%SWITCH%" == "compiler" set compiler_type=%VALUE%
-if "%SWITCH%" == "qt" set qt_path=%VALUE%
+if "%SWITCH%" == "msvc2008" set _msvc2008=%VALUE%
+if "%SWITCH%" == "msvc2008" set compiler_type=msvc2008
+if "%SWITCH%" == "msvc2010" set _msvc2010=%VALUE%
+if "%SWITCH%" == "msvc2010" set compiler_type=msvc2010
+
+if "%SWITCH%" == "python" set python_path=%VALUE%
+
+if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
+
+if "%SWITCH%" == "git" set git_path=%VALUE%
 if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
+
+if "%SWITCH%" == "qt" set qt_path=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
 if "%SWITCH%" == "boostinc" set BOOST_INCLUDEDIR=%VALUE%
 rem also add boostlib to path so dlls are found
 if "%SWITCH%" == "boostlib" set BOOST_LIBRARYDIR=%VALUE%
 if "%SWITCH%" == "boostlib" set PATH=%VALUE%;%PATH%
-if "%SWITCH%" == "msvc2008" set _msvc2008=%VALUE%
-if "%SWITCH%" == "msvc2008" set compiler_type=msvc2008
-if "%SWITCH%" == "msvc2010" set _msvc2010=%VALUE%
-if "%SWITCH%" == "msvc2010" set compiler_type=msvc2010
 goto eof
 
 :settings
@@ -154,6 +159,7 @@ rem ********************
 rem *** Architecture ***
 rem ********************
 
+echo.
 echo.Script Running:
 echo.
 echo.Setting Program Files
@@ -180,15 +186,13 @@ rem ***************
 :blender
 echo.
 echo.Setting Blender Environment
-FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir') do (
-  set BLENDERHOME=%%B
-)
+
 if "%BLENDERHOME%" == "" (
   echo.Blender not found
   goto endblender
 )
 echo.Blender home: %BLENDERHOME%
-for %%A in (2.57,2.58,2.59,2.60,2.61,2.62,2.63,2.64) do (
+for %%A in (2.62,2.63,2.64, 2.65, 2.66, 2.67) do (
   if exist "%BLENDERHOME%\%%A" set BLENDERVERSION=%%A
 )
 if "%BLENDERVERSION%" == "" (
@@ -484,20 +488,27 @@ rem **************
 rem ** Clean Up **
 rem **************
 
-set arch_type=
-set compiler_type=
-set git_path=
-set qt_path=
-set python_path=
-set nsis_path=
+set ProgramFiles32=
 set work_folder=
+set arch_type=
+
+set compiler_type=
 set _msvc2008=
 set _msvc2010=
+
+set blender=
+
+set python_path=
+
+set git_path=
+set nsis_path=
+
+set qt_path=
 set _cmake=
 set _swig=
+
 set SWITCHPARSE=
 set SWITCH=
 set VALUE=
-set ProgramFiles32=
 
 :eof
