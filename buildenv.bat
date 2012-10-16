@@ -101,7 +101,7 @@ echo.  msvc2010=FOLDER         [default: %_msvc2010%]
 
 rem libs
 echo.Libraries:
-echo.  swig=FOLDER             [default: %swig]
+echo.  swig=FOLDER             [default: %swig%]
 
 echo.  boostinc=FOLDER         [default: %boostinc%]
 echo.  boostlib=FOLDER         [default: %boostlib%]
