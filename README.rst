@@ -70,7 +70,8 @@ Compilers
 ---------
 
 compiler=COMPILER
-  COMPILER to set up: msvc2008, msvc2010, mingw, sdk60, sdk70, or sdk71
+  COMPILER to set up: msvc2008, msvc2010, mingw, sdk60, sdk70, or sdk71;
+  see below for detailed information
 
 msvc2008=FOLDER
   the base FOLDER of your MSVC 2008 installation;
@@ -154,22 +155,22 @@ The batch script does the following:
 Supported Compilers
 -------------------
 
-``compiler=mingw``
+compiler=mingw
   `mingw <http://www.mingw.org/>`_ (32-bit only)
 
-``compiler=msvc2008``
+compiler=msvc2008
   `Visual C++ 2008 Express <http://go.microsoft.com/?linkid=7729279>`_
   (32-bit and 64-bit).
   For the 64-bit compiler, you also need the Windows SDK 7.0.
 
-``compiler=sdk70``
+compiler=sdk70
   `Microsoft Windows SDK for Windows 7 and .NET Framework 3.5 SP1
   <http://www.microsoft.com/en-us/download/details.aspx?id=3138>`_
   (32-bit and 64-bit).
   This is SDK is also known as *Windows SDK 7.0*.
   The compilers are identical to the ones that come with Visual C++ 2008.
 
-``compiler=msvc2010``
+compiler=msvc2010
   `Visual C++ 2010 Express <http://go.microsoft.com/?linkid=9709949>`_
   (32-bit only).
   You may also want to install
@@ -184,7 +185,7 @@ Supported Compilers
   If you need to target 64-bit with a Visual C++ 2010 compatible
   compiler, use ``compiler=sdk71``.
 
-``compiler=sdk71``
+compiler=sdk71
   `Microsoft Windows SDK for Windows 7 and .NET Framework 4
   <http://www.microsoft.com/en-gb/download/details.aspx?id=8279>`_
   (32-bit and 64-bit).
