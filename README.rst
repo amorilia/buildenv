@@ -46,6 +46,9 @@ Languages
 python=FOLDER
   the base FOLDER of your Python installation; its architecture must match BITS
 
+swig=FOLDER
+  the base FOLDER of your SWIG installation
+
 Applications
 ------------
 
@@ -83,9 +86,6 @@ msvc2010=FOLDER
 
 Libraries
 ---------
-
-swig=FOLDER
-  the base FOLDER of your SWIG installation
 
 boostinc=FOLDER
   the boost include FOLDER
