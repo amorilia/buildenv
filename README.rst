@@ -12,11 +12,11 @@ Usage
   with pre-defined environmental setting.
 
 * These setting are for the console session only,
-  to avoid PATH pollution and avoids manually setting on each use.
+  to avoid *PATH* pollution and avoids manually setting on each use.
 
 * The setting are read from a .ini file created by the user in the ./ini folder.
 
-* Running create-shortcut.bat creates separate buildenv shortcuts
+* Running :file:`create-shortcut.bat` creates separate buildenv shortcuts
   on your desktop.
 
 * Running the shortcut will call buildenv, passing the specific .ini setting,
@@ -101,7 +101,7 @@ qt=FOLDER
 Notes
 =====
 
-* Running buildenv.bat from command-line without arguments
+* Running :file:`buildenv.bat` without arguments
   will display the auto-detected values.
 
 * Many of the values have defaults,
@@ -123,10 +123,8 @@ Notes
   if installed at their default locations.
   Set the corresponding flags, if detection fails, or if detection picks the wrong
   version for you (for instance, if you have multiple versions of Qt installed,
-  but you want buildenv.bat to pick a particular one).
+  but you want :file:`buildenv.bat` to pick a particular one).
   
-* Running buildenv.bat without arguments will display all available flags.
-
 * The ``start`` flag is your working folder,
   either relative to ``C:\Users\<username>``, or absolute.
   If you use eclipse, you may want to type ``start=workspace``.
@@ -138,7 +136,7 @@ The batch script does the following:
 
 * Updates *PATH* for the specified version of Python.
 * Updates *PATH*, *INCLUDE*, and *LIB* for the specified compiler.
-* Updates Python's ``distutils.cfg`` to use the specified compiler.
+* Updates Python's :file:`distutils.cfg` to use the specified compiler.
 * Sets *PYTHONFOLDER* to the folder where the specified version of Python resides.
 * Sets *BLENDERHOME*, *BLENDERVERSION*, *BLENDERADDONS*,
   and *APPDATABLENDERADDONS* according
