@@ -1,4 +1,4 @@
-Buildenv is batch script used to set up a build environment on Windows.
+Buildenv is batch script used to set up build environments on Windows.
 
 Installation
 ============
@@ -8,73 +8,114 @@ Installation
 Usage
 =====
 
-* Build Env is used to setup a console window with pre-defined environmental setting.
+* Buildenv is used to setup a console window
+  with pre-defined environmental setting.
 
-* These setting are for the console session only to avoid PATH pollution and avoids manually setting on each use.
+* These setting are for the console session only,
+  to avoid PATH pollution and avoids manually setting on each use.
 
 * The setting are read from a .ini file created by the user in the ./ini folder.
 
-* Running create-shortcut creates separate buildenv shortcuts on your desktop.
+* Running create-shortcut.bat creates separate buildenv shortcuts
+  on your desktop.
 
-* Running the shortcut will call buildenv, passing the specific .ini setting, with a resulting console window.
+* Running the shortcut will call buildenv, passing the specific .ini setting,
+  with a resulting console window.
 
 INI Settings
 ============
 
-* Add the relvant options, based on the following to an .ini file placed in the ./ini folder
+* Add the relvant options, based on the following,
+  to an .ini file placed in the ./ini folder
 
-* The ini file has a number of flags which can be set using the format ``flag=value``.
+* The ini file has a number of flags
+  which can be set using the format ``flag=value``.
 
-Misc:
-  start=FOLDER            start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH% or absolute 
+Miscellaneous
+-------------
 
-  arch=BITS               target BITS architecture: 32, or 64
+start=FOLDER
+  start FOLDER, either relative to %HOMEDRIVE%%HOMEPATH% or absolute 
 
-Languages:
-  python=FOLDER           the base FOLDER of your Python installation; its architecture must match BITS
+arch=BITS
+  target BITS architecture: 32, or 64
 
-Progs:
-  BLENDERHOME=FOLDER      the base FOLDER of your Blender installation;
+Languages
+---------
 
-Utilities:
-  git=FOLDER              the base FOLDER of your msysGit installation; use this flag when automatic detection fails
+python=FOLDER
+  the base FOLDER of your Python installation; its architecture must match BITS
 
-  nsis=FOLDER             the base FOLDER of your NSIS installation; use this flag when automatic detection fails
+Applications
+------------
 
-  cmake=FOLDER            the base FOLDER of your CMake installation;
+blender=FOLDER
+  the base FOLDER of your Blender installation;
 
-Compilers:
-  compiler=COMPILER       COMPILER to set up: msvc2008, msvc2010, mingw, sdk60, sdk70, or sdk71
+Utilities
+---------
 
-  msvc2008=FOLDER         the base FOLDER of your MSVC 2008 installation; implies compiler=msvc2008 when set
+git=FOLDER
+  the base FOLDER of your msysGit installation;
+  use this flag when automatic detection fails
 
-  msvc2010=FOLDER         the base FOLDER of your MSVC 2010 installation; implies compiler=msvc2010 when set
+nsis=FOLDER
+  the base FOLDER of your NSIS installation;
+  use this flag when automatic detection fails
 
-Librarys:
-  swig=FOLDER             the base FOLDER of your SWIG installation
+cmake=FOLDER
+  the base FOLDER of your CMake installation;
 
-  boostinc=FOLDER         the boost include FOLDER
+Compilers
+---------
+
+compiler=COMPILER
+  COMPILER to set up: msvc2008, msvc2010, mingw, sdk60, sdk70, or sdk71
+
+msvc2008=FOLDER
+  the base FOLDER of your MSVC 2008 installation;
+  implies compiler=msvc2008 when set
+
+msvc2010=FOLDER
+  the base FOLDER of your MSVC 2010 installation;
+  implies compiler=msvc2010 when set
+
+Libraries
+---------
+
+swig=FOLDER
+  the base FOLDER of your SWIG installation
+
+boostinc=FOLDER
+  the boost include FOLDER
   
-  boostlib=FOLDER         the boost library FOLDER; must match compiler and architecture
+boostlib=FOLDER
+  the boost library FOLDER; must match compiler and architecture
 
-  qt=FOLDER               the base FOLDER of your Qt SDK installation;
-                          use this flag when automatic detection fails
+qt=FOLDER
+  the base FOLDER of your Qt SDK installation;
+  use this flag when automatic detection fails
 
 
 Notes
 =====
-* Running buildenv.bat from command-line will display the auto-detected values.
 
-* Many of the values have defaults, however you should set at least ``arch`` and ``compiler``.
+* Running buildenv.bat from command-line without arguments
+  will display the auto-detected values.
+
+* Many of the values have defaults,
+  however you should set at least ``arch`` and ``compiler``.
   
 * For Python development:
 
   - You should also set ``python``.
+
   - For Python development, your choice of compiler
     must match the compiler used to compile your version of Python.
     For Python 2.6, 2.7, 3.0, 3.1, and 3.2, this is ``msvc2008``.
     For older versions of Python, you can try ``mingw``,
     although your mileage may vary.
+
   - ``arch`` must match the architecture of the Python at ``python``.
 
 * Other applications, such as Qt, msysGit, and NSIS, are automatically detected
@@ -162,8 +203,8 @@ Supported Compilers
 
 Supported versions of Blender
 -----------------------------
-``blender=FOLDER``
-* Supported version - 2.62, 2.63, 2.64, 2.65, 2.66, 2.67.
+
+* 2.62, 2.63, 2.64, 2.65, 2.66, 2.67.
 * Will detect the addon location, either local blender folder or users appdata folder.
 
 
