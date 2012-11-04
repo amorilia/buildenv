@@ -32,6 +32,9 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\I
 rem programs
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir 2^> nul') do set blender=%%B
 
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set SevenZip=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set SevenZip=%%B
+
 rem utilities
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
@@ -86,6 +89,7 @@ echo.  python=FOLDER           [default: %python_path%]
 rem Progs
 echo.Programs:
 echo.  blender=FOLDER          [default: %blender%]
+echo.  7-zip=FOLDER            [default: %SevenZip%]
 
 rem Utilities
 echo.Utilities:
@@ -145,6 +149,7 @@ if "%SWITCH%" == "msvc2010" set compiler_type=msvc2010
 if "%SWITCH%" == "python" set python_path=%VALUE%
 
 if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
+if "%SWITCH%" == "SevenZip" set SevenZipHOME=%VALUE%
 
 if "%SWITCH%" == "git" set git_path=%VALUE%
 if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
@@ -214,6 +219,24 @@ set APPDATABLENDERADDONS=%APPDATA%\Blender Foundation\Blender\%BLENDERVERSION%\s
 echo.Global Blender addons: %BLENDERADDONS%
 echo.Local Blender addons: %APPDATABLENDERADDONS%
 :endblender
+
+rem ****************
+rem *** SevenZip ***
+rem ****************
+
+:SevenZip
+echo.
+echo.Setting SevenZip Environment
+if exist "%ProgramFiles32%\7z.exe" set SevenZipHOME=%ProgramFiles32%
+if exist "%ProgramFiles%\7z.exe" set SevenZipHOME=%ProgramFiles%
+if exist "%SevenZip%\7z.exe" set SevenZipHOME=%SevenZip%
+if "%SevenZipHOME%" == "" (
+  echo.7-zip not found
+  goto endSevenZip
+  )
+echo.7-Zip home: %SevenZipHOME%
+set PATH=%SevenZipHOME%;%PATH%
+:endSevenZip
 
 
 rem ************
@@ -502,6 +525,7 @@ set _msvc2008=
 set _msvc2010=
 
 set blender=
+set SevenZip=
 
 set python_path=
 
