@@ -1,15 +1,14 @@
 @echo off
 
-rem *************************
-rem ** Default Flag Values **
-rem *************************
+rem *******************
+rem ** Detect Values **
+rem *******************
 
+rem system
 if "%ProgramFiles(x86)%" == "" set arch_type=32
 if not "%ProgramFiles(x86)%" == "" set arch_type=64
 set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
-
-
 
 set work_folder=%HOMEDRIVE%%HOMEPATH%
 
@@ -32,9 +31,6 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\I
 rem programs
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir 2^> nul') do set blender=%%B
 
-FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set SevenZip=%%B
-FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set SevenZip=%%B
-
 rem utilities
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
@@ -45,9 +41,11 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMa
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
 
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set SevenZip=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set SevenZip=%%B
+
 rem Libraries
 if exist "C:\QtSDK" set qt_path=C:\QtSDK
-
 
 
 rem *************
@@ -91,7 +89,6 @@ echo.  python=FOLDER           [default: %python_path%]
 rem Progs
 echo.Programs:
 echo.  blender=FOLDER          [default: %blender%]
-echo.  7-zip=FOLDER            [default: %SevenZip%]
 
 rem Utilities
 echo.Utilities:
@@ -100,6 +97,8 @@ echo.  git=FOLDER              [default: %git_path%]
 echo.  nsis=FOLDER             [default: %nsis_path%]
 
 echo.  cmake=FOLDER            [default: %_cmake%]
+
+echo.  7-zip=FOLDER            [default: %SevenZip%]
 
 rem compilers
 echo.Compilers:
@@ -139,9 +138,10 @@ set _line=
 set SWITCH=%SWITCH:"=%
 set VALUE=%VALUE:"=%
 echo.Parsing %SWITCH%=%VALUE%
-if "%SWITCH%" == "start" set work_folder=%VALUE%
 
+if "%SWITCH%" == "start" set work_folder=%VALUE%
 if "%SWITCH%" == "arch" set arch_type=%VALUE%
+
 if "%SWITCH%" == "compiler" set compiler_type=%VALUE%
 if "%SWITCH%" == "msvc2008" set _msvc2008=%VALUE%
 if "%SWITCH%" == "msvc2008" set compiler_type=msvc2008
@@ -151,11 +151,11 @@ if "%SWITCH%" == "msvc2010" set compiler_type=msvc2010
 if "%SWITCH%" == "python" set python_path=%VALUE%
 
 if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
-if "%SWITCH%" == "SevenZip" set SevenZipHOME=%VALUE%
 
 if "%SWITCH%" == "git" set git_path=%VALUE%
 if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
+if "%SWITCH%" == "SevenZip" set SevenZipHOME=%VALUE%
 
 if "%SWITCH%" == "qt" set qt_path=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
@@ -499,7 +499,6 @@ echo.Compiler not found
 :endcompiler
 
 :workfolder
-if "%work_folder%" == "empty" goto endworkfolder
 if exist "%HOMEDRIVE%%HOMEPATH%\%work_folder%" set work_folder=%HOMEDRIVE%%HOMEPATH%\%work_folder%
 echo.
 echo.Changing to directory: %work_folder%
@@ -527,15 +526,15 @@ set _msvc2008=
 set _msvc2010=
 
 set blender=
-set SevenZip=
 
 set python_path=
 
 set git_path=
 set nsis_path=
+set SevenZip=
+set _cmake=
 
 set qt_path=
-set _cmake=
 set _swig=
 
 set SWITCHPARSE=
