@@ -41,8 +41,8 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMa
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
 
-FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set SevenZip=%%B
-FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set SevenZip=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set seven_zip=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set seven_zip=%%B
 
 rem Libraries
 if exist "C:\QtSDK" set qt_path=C:\QtSDK
@@ -98,7 +98,7 @@ echo.  nsis=FOLDER             [default: %nsis_path%]
 
 echo.  cmake=FOLDER            [default: %_cmake%]
 
-echo.  7-zip=FOLDER            [default: %SevenZipHOME%]
+echo.  7-zip=FOLDER            [default: %seven_zip%]
 
 rem compilers
 echo.Compilers:
@@ -155,7 +155,7 @@ if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
 if "%SWITCH%" == "git" set git_path=%VALUE%
 if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
-if "%SWITCH%" == "SevenZip" set SevenZip=%VALUE%
+if "%SWITCH%" == "seven_zip" set seven_zip=%VALUE%
 
 if "%SWITCH%" == "qt" set qt_path=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
@@ -223,22 +223,22 @@ echo.Local Blender addons: %APPDATABLENDERADDONS%
 :endblender
 
 rem ****************
-rem *** SevenZip ***
+rem *** Seven_zip ***
 rem ****************
 
-:SevenZip
+:seven_zip
 echo.
-echo.Setting SevenZip Environment
-if exist "%ProgramFiles32%\7z.exe" set SevenZipHOME=%ProgramFiles32%
-if exist "%ProgramFiles%\7z.exe" set SevenZipHOME=%ProgramFiles%
-if exist "%SevenZip%\7z.exe" set SevenZipHOME=%SevenZip%
-if "%SevenZipHOME%" == "" (
+echo.Setting seven_zip Environment
+if exist "%ProgramFiles32%\7z.exe" set seven_zip_home=%ProgramFiles32%
+if exist "%ProgramFiles%\7z.exe" set seven_zip_home=%ProgramFiles%
+if exist "%seven_zip%\7z.exe" set seven_zip_home=%seven_zip%
+if "%seven_zip_home%" == "" (
   echo.7-zip not found
-  goto endSevenZip
+  goto endseven_zip
   )
-echo.7-Zip home: %SevenZipHOME%
-set PATH=%SevenZipHOME%;%PATH%
-:endSevenZip
+echo.7-Zip home: %seven_zip_home%
+set PATH=%seven_zip_home%;%PATH%
+:endseven_zip
 
 
 rem ************
@@ -531,7 +531,7 @@ set python_path=
 
 set git_path=
 set nsis_path=
-set SevenZip=
+set seven_zip=
 set _cmake=
 
 set qt_path=
