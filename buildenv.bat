@@ -98,7 +98,7 @@ echo.  nsis=FOLDER             [default: %nsis_path%]
 
 echo.  cmake=FOLDER            [default: %_cmake%]
 
-echo.  7-zip=FOLDER            [default: %SevenZip%]
+echo.  7-zip=FOLDER            [default: %SevenZipHOME%]
 
 rem compilers
 echo.Compilers:
@@ -155,7 +155,7 @@ if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
 if "%SWITCH%" == "git" set git_path=%VALUE%
 if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
-if "%SWITCH%" == "SevenZip" set SevenZipHOME=%VALUE%
+if "%SWITCH%" == "SevenZip" set SevenZip=%VALUE%
 
 if "%SWITCH%" == "qt" set qt_path=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
@@ -536,6 +536,8 @@ set _cmake=
 
 set qt_path=
 set _swig=
+set boostinc=
+set boostlib=
 
 set SWITCHPARSE=
 set SWITCH=
