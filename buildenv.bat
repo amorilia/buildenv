@@ -55,10 +55,12 @@ rem ** Runtime **
 rem *************
 
 if "%1" == "" (
-echo. the ini file is not set
-echo. create your ini file, the workfolder variable must be set in the file
-echo. refer to the readme for proper syntax
-echo. then execute the create-shortcuts.bat
+echo.Path to ini file(s)/folder not set;
+echo.Opening Readme.txt....
+echo.
+echo.Please refer to this document for correct syntax and .ini file contents
+echo.before trying to execute the create-shortcuts.bat again.
+
 start notepad.exe README.rst
 goto displayparams
 )
