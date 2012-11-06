@@ -35,9 +35,9 @@ goto eof
 
 :error
 echo.Unable not locate scripts.
-echo.Please pass correct path parameters: createshortcuts.bat [ini source folder] [shortcut destination folder] 
+echo.Please pass correct path parameters: create-shortcuts.bat [ini source folder] [shortcut destination folder] 
 echo.
-echo.Attempted to read .INI files from [folder=%_ini_location%]
+echo.Attempted to read .ini files from [folder=%_ini_location%]
 echo.Attempted to write Shortcuts to [folder=%_shortcut_folder%]
 echo.
 
