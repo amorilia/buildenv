@@ -41,8 +41,8 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMa
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set _nsis_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set _nsis_path=%%B
 
-FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set seven_zip=%%B
-FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set seven_zip=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set _seven_zip=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set _seven_zip=%%B
 
 rem Libraries
 if exist "C:\QtSDK" set qt_path=C:\QtSDK
@@ -98,7 +98,7 @@ echo.  nsis=FOLDER             [default: %_nsis_path%]
 
 echo.  cmake=FOLDER            [default: %_cmake%]
 
-echo.  7-zip=FOLDER            [default: %seven_zip%]
+echo.  7-zip=FOLDER            [default: %_seven_zip%]
 
 rem compilers
 echo.Compilers:
@@ -155,7 +155,7 @@ if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
 if "%SWITCH%" == "git" set _git_path=%VALUE%
 if "%SWITCH%" == "nsis" set _nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
-if "%SWITCH%" == "seven_zip" set seven_zip=%VALUE%
+if "%SWITCH%" == "seven_zip" set _seven_zip=%VALUE%
 
 if "%SWITCH%" == "qt" set qt_path=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
@@ -229,15 +229,15 @@ rem ****************
 :seven_zip
 echo.
 echo.Setting seven_zip Environment
-if exist "%ProgramFiles32%\7-zip\7z.exe" set seven_zip_home=%ProgramFiles32%\7-zip
-if exist "%ProgramFiles%\7-zip\7z.exe" set seven_zip_home=%ProgramFiles%\7-zip
-if exist "%seven_zip%\7z.exe" set seven_zip_home=%seven_zip%
-if "%seven_zip%" == "" (
+if exist "%ProgramFiles32%\7-zip\7z.exe" set SEVENZIPHOME=%ProgramFiles32%\7-zip
+if exist "%ProgramFiles%\7-zip\7z.exe" set SEVENZIPHOME=%ProgramFiles%\7-zip
+if exist "%_seven_zip%\7z.exe" set SEVENZIPHOME=%_seven_zip%
+if "%SEVENZIPHOME%" == "" (
   echo.7-zip not found
   goto endseven_zip
   )
-echo.7-Zip home: %seven_zip%
-set PATH=%seven_zip%;%PATH%
+echo.7-Zip home: %SEVENZIPHOME%
+set PATH=%SEVENZIPHOME%;%PATH%
 :endseven_zip
 
 
@@ -531,7 +531,7 @@ set _python_path=
 
 set _git_path=
 set _nsis_path=
-set seven_zip=
+set _seven_zip=
 set _cmake=
 
 set qt_path=
