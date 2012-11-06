@@ -112,8 +112,8 @@ rem libs
 echo.Libraries:
 echo.  swig=FOLDER             [default: %_swig%]
 
-echo.  boostinc=FOLDER         [default: %BOOST_INCLUDEDIR%]
-echo.  boostlib=FOLDER         [default: %BOOST_LIBRARYDIR%]
+echo.  boostinc=FOLDER         [default: %_boostinc%]
+echo.  boostlib=FOLDER         [default: %_boostlib%]
 
 echo.  qt=FOLDER               [default: %_qt_path%]
 
