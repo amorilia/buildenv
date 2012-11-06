@@ -54,7 +54,7 @@ rem *************
 
 if "%1" == "" (
 echo.Path to ini file(s)/folder not set;
-echo.Opening Readme.txt....
+echo.Opening README.rst
 echo.
 echo.Please refer to this document for correct syntax and .ini file contents
 echo.before trying to execute the create-shortcuts.bat again.
@@ -98,7 +98,7 @@ echo.  nsis=FOLDER             [default: %_nsis_path%]
 
 echo.  cmake=FOLDER            [default: %_cmake%]
 
-echo.  7-zip=FOLDER            [default: %_seven_zip%]
+echo.  seven_zip=FOLDER        [default: %_seven_zip%]
 
 rem compilers
 echo.Compilers:
@@ -203,7 +203,7 @@ if "%BLENDERHOME%" == "" (
   goto endblender
 )
 echo.Blender home: %BLENDERHOME%
-for %%A in (2.62,2.63,2.64, 2.65, 2.66, 2.67) do (
+for %%A in (2.62,2.63,2.64,2.65,2.66,2.67) do (
   if exist "%BLENDERHOME%\%%A" set BLENDERVERSION=%%A
 )
 if "%BLENDERVERSION%" == "" (
