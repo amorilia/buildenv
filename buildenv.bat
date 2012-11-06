@@ -45,7 +45,7 @@ FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v P
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set _seven_zip=%%B
 
 rem Libraries
-if exist "C:\QtSDK" set qt_path=C:\QtSDK
+if exist "C:\QtSDK" set _qt_path=C:\QtSDK
 
 
 rem *************
@@ -115,7 +115,7 @@ echo.  swig=FOLDER             [default: %swig%]
 echo.  boostinc=FOLDER         [default: %boostinc%]
 echo.  boostlib=FOLDER         [default: %boostlib%]
 
-echo.  qt=FOLDER               [default: %qt_path%]
+echo.  qt=FOLDER               [default: %_qt_path%]
 
 rem Likely, the script was run from Windows explorer...
 pause
@@ -157,7 +157,7 @@ if "%SWITCH%" == "nsis" set _nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
 if "%SWITCH%" == "seven_zip" set _seven_zip=%VALUE%
 
-if "%SWITCH%" == "qt" set qt_path=%VALUE%
+if "%SWITCH%" == "qt" set _qt_path=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
 if "%SWITCH%" == "boostinc" set BOOST_INCLUDEDIR=%VALUE%
 rem also add boostlib to path so dlls are found
@@ -343,9 +343,9 @@ echo.Python not found
 echo.
 echo.Setting Qt Environment
 rem 1. registry?
-rem 2. check for some standard file to ensure qt_path actually contains the Qt SDK?
+rem 2. check for some standard file to ensure _qt_path actually contains the Qt SDK?
 rem    (similar to NSIS, Git, and Python checks)
-if exist "%qt_path%" set QTHOME=%qt_path%
+if exist "%_qt_path%" set QTHOME=%_qt_path%
 if "%QTHOME%" == "" (
     echo.Qt not found
     goto endqt
@@ -534,7 +534,7 @@ set _nsis_path=
 set _seven_zip=
 set _cmake=
 
-set qt_path=
+set _qt_path=
 set _swig=
 set boostinc=
 set boostlib=
