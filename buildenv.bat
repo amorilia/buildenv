@@ -10,7 +10,7 @@ if not "%ProgramFiles(x86)%" == "" set _arch_type=64
 set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
 
-set work_folder=%HOMEDRIVE%%HOMEPATH%
+set _work_folder=%HOMEDRIVE%%HOMEPATH%
 
 rem compilers
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
@@ -79,7 +79,7 @@ echo.
 echo.Auto-detected Locations:
 
 rem Misc
-echo.  start=FOLDER            [default: %work_folder%]
+echo.  start=FOLDER            [default: %_work_folder%]
 echo.  arch=BITS               [default: %_arch_type%]
 
 rem Lang
@@ -139,7 +139,7 @@ set SWITCH=%SWITCH:"=%
 set VALUE=%VALUE:"=%
 echo.Parsing %SWITCH%=%VALUE%
 
-if "%SWITCH%" == "start" set work_folder=%VALUE%
+if "%SWITCH%" == "start" set _work_folder=%VALUE%
 if "%SWITCH%" == "arch" set _arch_type=%VALUE%
 
 if "%SWITCH%" == "compiler" set compiler_type=%VALUE%
@@ -499,11 +499,11 @@ echo.Compiler not found
 :endcompiler
 
 :workfolder
-if exist "%HOMEDRIVE%%HOMEPATH%\%work_folder%" set work_folder=%HOMEDRIVE%%HOMEPATH%\%work_folder%
+if exist "%HOMEDRIVE%%HOMEPATH%\%_work_folder%" set _work_folder=%HOMEDRIVE%%HOMEPATH%\%_work_folder%
 echo.
-echo.Changing to directory: %work_folder%
-if not exist "%work_folder%" goto workfoldernotfound
-cd /d "%work_folder%"
+echo.Changing to directory: %_work_folder%
+if not exist "%_work_folder%" goto workfoldernotfound
+cd /d "%_work_folder%"
 goto endworkfolder
 
 :workfoldernotfound
@@ -518,7 +518,7 @@ rem ** Clean Up **
 rem **************
 
 set ProgramFiles32=
-set work_folder=
+set _work_folder=
 set _arch_type=
 
 set compiler_type=
