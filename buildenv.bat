@@ -38,8 +38,8 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\W
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
 
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set _nsis_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set _nsis_path=%%B
 
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set seven_zip=%%B
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set seven_zip=%%B
@@ -94,7 +94,7 @@ rem Utilities
 echo.Utilities:
 echo.  git=FOLDER              [default: %_git_path%]
 
-echo.  nsis=FOLDER             [default: %nsis_path%]
+echo.  nsis=FOLDER             [default: %_nsis_path%]
 
 echo.  cmake=FOLDER            [default: %_cmake%]
 
@@ -153,7 +153,7 @@ if "%SWITCH%" == "python" set _python_path=%VALUE%
 if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
 
 if "%SWITCH%" == "git" set _git_path=%VALUE%
-if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
+if "%SWITCH%" == "nsis" set _nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
 if "%SWITCH%" == "seven_zip" set seven_zip=%VALUE%
 
@@ -250,7 +250,7 @@ echo.
 echo.Setting NSIS Environment
 if exist "%ProgramFiles32%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles32%\NSIS
 if exist "%ProgramFiles%\NSIS\makensis.exe" set NSISHOME=%ProgramFiles%\NSIS
-if exist "%nsis_path%\makensis.exe" set NSISHOME=%nsis_path%
+if exist "%_nsis_path%\makensis.exe" set NSISHOME=%_nsis_path%
 if "%NSISHOME%" == "" (
   echo.NSIS not found
   goto endnsis
@@ -530,7 +530,7 @@ set _blender=
 set _python_path=
 
 set _git_path=
-set nsis_path=
+set _nsis_path=
 set seven_zip=
 set _cmake=
 
