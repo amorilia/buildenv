@@ -60,15 +60,16 @@ Utilities
 
 git=FOLDER
   the base FOLDER of your msysGit installation;
-  use this flag when automatic detection fails
 
 nsis=FOLDER
   the base FOLDER of your NSIS installation;
-  use this flag when automatic detection fails
 
 cmake=FOLDER
   the base FOLDER of your CMake installation;
-
+  
+seven_zip=FOLDER
+  the base FOLDER of your 7-zip installation;
+  
 Compilers
 ---------
 
@@ -146,6 +147,7 @@ The batch script does the following:
 * Sets *NSISHOME* according to whatever version of NSIS is found, and
   update *PATH*.
 * Sets *GITHOME* to the msysGit folder, and update *PATH*.
+* Sets *SEVENZIPHOME* to the 7-zip folder, and updates *PATH*.
 * Sets *CMAKEHOME* to the CMake folder, and update *PATH*.
 * Sets *SWIGHOME* to the SWIG folder, and update *PATH*.
 * Sets *BOOST_INCLUDEDIR* and *BOOST_LIBRARYDIR* according to their corresponding flags.
@@ -228,6 +230,10 @@ Supported versions of Git
 -------------------------
 
 * `msysGit <http://code.google.com/p/msysgit/>`_.
+
+Supported versions of 7-Zip
+
+* Any.
 
 Supported versions of CMake
 ---------------------------

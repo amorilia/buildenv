@@ -1,15 +1,14 @@
 @echo off
 
-rem *************************
-rem ** Default Flag Values **
-rem *************************
+rem *******************
+rem ** Detect Values **
+rem *******************
 
+rem system
 if "%ProgramFiles(x86)%" == "" set arch_type=32
 if not "%ProgramFiles(x86)%" == "" set arch_type=64
 set ProgramFiles32=%ProgramFiles%
 if not "%ProgramFiles(x86)%" == "" set ProgramFiles32=%ProgramFiles(x86)%
-
-
 
 set work_folder=%HOMEDRIVE%%HOMEPATH%
 
@@ -42,9 +41,11 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMa
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\NSIS" /ve 2^> nul') do set nsis_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\NSIS" /ve 2^> nul') do set nsis_path=%%B
 
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\7-Zip" /v Path 2^> nul') do set seven_zip=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\7-Zip" /v Path 2^> nul') do set seven_zip=%%B
+
 rem Libraries
 if exist "C:\QtSDK" set qt_path=C:\QtSDK
-
 
 
 rem *************
@@ -52,6 +53,12 @@ rem ** Runtime **
 rem *************
 
 if "%1" == "" (
+echo.Path to ini file(s)/folder not set;
+echo.Opening Readme.txt....
+echo.
+echo.Please refer to this document for correct syntax and .ini file contents
+echo.before trying to execute the create-shortcuts.bat again.
+
 start notepad.exe README.rst
 goto displayparams
 )
@@ -91,6 +98,8 @@ echo.  nsis=FOLDER             [default: %nsis_path%]
 
 echo.  cmake=FOLDER            [default: %_cmake%]
 
+echo.  7-zip=FOLDER            [default: %seven_zip%]
+
 rem compilers
 echo.Compilers:
 echo.  compiler=COMPILER       [default: %compiler_type%]
@@ -129,9 +138,10 @@ set _line=
 set SWITCH=%SWITCH:"=%
 set VALUE=%VALUE:"=%
 echo.Parsing %SWITCH%=%VALUE%
-if "%SWITCH%" == "start" set work_folder=%VALUE%
 
+if "%SWITCH%" == "start" set work_folder=%VALUE%
 if "%SWITCH%" == "arch" set arch_type=%VALUE%
+
 if "%SWITCH%" == "compiler" set compiler_type=%VALUE%
 if "%SWITCH%" == "msvc2008" set _msvc2008=%VALUE%
 if "%SWITCH%" == "msvc2008" set compiler_type=msvc2008
@@ -145,6 +155,7 @@ if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
 if "%SWITCH%" == "git" set git_path=%VALUE%
 if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
+if "%SWITCH%" == "seven_zip" set seven_zip=%VALUE%
 
 if "%SWITCH%" == "qt" set qt_path=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
@@ -210,6 +221,24 @@ set APPDATABLENDERADDONS=%APPDATA%\Blender Foundation\Blender\%BLENDERVERSION%\s
 echo.Global Blender addons: %BLENDERADDONS%
 echo.Local Blender addons: %APPDATABLENDERADDONS%
 :endblender
+
+rem ****************
+rem *** Seven_zip ***
+rem ****************
+
+:seven_zip
+echo.
+echo.Setting seven_zip Environment
+if exist "%ProgramFiles32%\7-zip\7z.exe" set seven_zip_home=%ProgramFiles32%\7-zip
+if exist "%ProgramFiles%\7-zip\7z.exe" set seven_zip_home=%ProgramFiles%\7-zip
+if exist "%seven_zip%\7z.exe" set seven_zip_home=%seven_zip%
+if "%seven_zip%" == "" (
+  echo.7-zip not found
+  goto endseven_zip
+  )
+echo.7-Zip home: %seven_zip%
+set PATH=%seven_zip%;%PATH%
+:endseven_zip
 
 
 rem ************
@@ -470,7 +499,6 @@ echo.Compiler not found
 :endcompiler
 
 :workfolder
-if "%work_folder%" == "empty" goto endworkfolder
 if exist "%HOMEDRIVE%%HOMEPATH%\%work_folder%" set work_folder=%HOMEDRIVE%%HOMEPATH%\%work_folder%
 echo.
 echo.Changing to directory: %work_folder%
@@ -503,10 +531,13 @@ set python_path=
 
 set git_path=
 set nsis_path=
+set seven_zip=
+set _cmake=
 
 set qt_path=
-set _cmake=
 set _swig=
+set boostinc=
+set boostlib=
 
 set SWITCHPARSE=
 set SWITCH=
