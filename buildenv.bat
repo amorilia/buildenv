@@ -53,7 +53,7 @@ rem ** Runtime **
 rem *************
 
 if "%1" == "" (
-echo.Path to ini file(s)/folder not set;
+echo.Path to ini file/folder not set;
 echo.Opening README.rst
 echo.
 echo.Please refer to this document for correct syntax and .ini file contents
