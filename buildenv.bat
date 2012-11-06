@@ -229,15 +229,15 @@ rem ****************
 :seven_zip
 echo.
 echo.Setting seven_zip Environment
-if exist "%ProgramFiles32%\7z.exe" set seven_zip_home=%ProgramFiles32%
-if exist "%ProgramFiles%\7z.exe" set seven_zip_home=%ProgramFiles%
+if exist "%ProgramFiles32%\7-zip\7z.exe" set seven_zip_home=%ProgramFiles32%\7-zip
+if exist "%ProgramFiles%\7-zip\7z.exe" set seven_zip_home=%ProgramFiles%\7-zip
 if exist "%seven_zip%\7z.exe" set seven_zip_home=%seven_zip%
-if "%seven_zip_home%" == "" (
+if "%seven_zip%" == "" (
   echo.7-zip not found
   goto endseven_zip
   )
-echo.7-Zip home: %seven_zip_home%
-set PATH=%seven_zip_home%;%PATH%
+echo.7-Zip home: %seven_zip%
+set PATH=%seven_zip%;%PATH%
 :endseven_zip
 
 
