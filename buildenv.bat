@@ -29,7 +29,7 @@ FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\I
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve 2^> nul') do set python_path=%%B
 
 rem programs
-FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir 2^> nul') do set blender=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir 2^> nul') do set _blender=%%B
 
 rem utilities
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
@@ -88,7 +88,7 @@ echo.  python=FOLDER           [default: %python_path%]
 
 rem Progs
 echo.Programs:
-echo.  blender=FOLDER          [default: %blender%]
+echo.  blender=FOLDER          [default: %_blender%]
 
 rem Utilities
 echo.Utilities:
@@ -198,7 +198,7 @@ rem ***************
 echo.
 echo.Setting Blender Environment
 
-if exist "%blender%\blender.exe" set BLENDERHOME=%blender%
+if exist "%_blender%\blender.exe" set BLENDERHOME=%_blender%
 if "%BLENDERHOME%" == "" (
   echo.Blender not found
   goto endblender
@@ -525,7 +525,7 @@ set _compiler_type=
 set _msvc2008=
 set _msvc2010=
 
-set blender=
+set _blender=
 
 set python_path=
 
