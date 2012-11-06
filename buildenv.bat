@@ -320,19 +320,22 @@ rem *************
 :boost
 echo.
 echo.Setting BOOST Environment
-if exist "%_boostlib%\" set BOOST_LIBRARYDIR=%_boostlib%
-if "%BOOST_LIBRARYDIR%" == "" (
-  echo.BOOST_LIBRARYDIR not found
-  goto endboost
-)
-set PATH=%BOOST_LIBRARYDIR%;%PATH%
 
 if exist "%_boostinc%\" set BOOST_INCLUDEDIR=%_boostinc% 
 if "%BOOST_INCLUDEDIR%" == "" (
   echo.BOOST_INCLUDEDIR not found
   goto endboost
 )
-set PATH=%BOOST_INCLUDEDIR%;%PATH%
+
+echo.BOOST Include Directory: %BOOST_INCLUDEDIR%
+
+if exist "%_boostlib%\" set BOOST_LIBRARYDIR=%_boostlib%
+if "%BOOST_LIBRARYDIR%" == "" (
+  echo.BOOST_LIBRARYDIR not found
+  goto endboost
+)
+set PATH=%BOOST_LIBRARYDIR%;%PATH%
+echo.BOOST Library: %BOOST_LIBRARYDIR%
 
 :endboost
 
