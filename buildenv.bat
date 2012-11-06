@@ -14,11 +14,11 @@ set _work_folder=%HOMEDRIVE%%HOMEPATH%
 
 rem compilers
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 9.0 2^> nul') do set _msvc2008=%%B
-if not "%_msvc2008%" == "" set compiler_type=msvc2008
+if not "%_msvc2008%" == "" set _compiler_type=msvc2008
 
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\SxS\VC7" /v 10.0 2^> nul') do set _msvc2010=%%B
 if exist "%ProgramFiles32%\Microsoft Visual Studio 10.0\VC" set _msvc2010=%ProgramFiles32%\Microsoft Visual Studio 10.0\VC
-if not "%_msvc2010%" == "" set compiler_type=msvc2010
+if not "%_msvc2010%" == "" set _compiler_type=msvc2010
 
 rem langs
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set python_path=%%B
@@ -102,7 +102,7 @@ echo.  7-zip=FOLDER            [default: %seven_zip%]
 
 rem compilers
 echo.Compilers:
-echo.  compiler=COMPILER       [default: %compiler_type%]
+echo.  compiler=COMPILER       [default: %_compiler_type%]
 
 echo.  msvc2008=FOLDER         [default: %_msvc2008%]
 
@@ -142,11 +142,11 @@ echo.Parsing %SWITCH%=%VALUE%
 if "%SWITCH%" == "start" set _work_folder=%VALUE%
 if "%SWITCH%" == "arch" set _arch_type=%VALUE%
 
-if "%SWITCH%" == "compiler" set compiler_type=%VALUE%
+if "%SWITCH%" == "compiler" set _compiler_type=%VALUE%
 if "%SWITCH%" == "msvc2008" set _msvc2008=%VALUE%
-if "%SWITCH%" == "msvc2008" set compiler_type=msvc2008
+if "%SWITCH%" == "msvc2008" set _compiler_type=msvc2008
 if "%SWITCH%" == "msvc2010" set _msvc2010=%VALUE%
-if "%SWITCH%" == "msvc2010" set compiler_type=msvc2010
+if "%SWITCH%" == "msvc2010" set _compiler_type=msvc2010
 
 if "%SWITCH%" == "python" set python_path=%VALUE%
 
@@ -383,20 +383,20 @@ rem ***************
 
 :compilers
 echo.
-echo.Setting Compiler Environment (%compiler_type%, %_arch_type% bit)
+echo.Setting Compiler Environment (%_compiler_type%, %_arch_type% bit)
 
-if "%compiler_type%x%_arch_type%" == "msvc2010x32" goto msvc2010x32
-if "%compiler_type%x%_arch_type%" == "msvc2010x64" goto msvc2010x64
-if "%compiler_type%x%_arch_type%" == "msvc2008x32" goto msvc2008x32
-if "%compiler_type%x%_arch_type%" == "msvc2008x64" goto msvc2008x64
-if "%compiler_type%x%_arch_type%" == "mingwx32" goto mingwx32
-if "%compiler_type%x%_arch_type%" == "mingwx64" goto mingwx64
-if "%compiler_type%x%_arch_type%" == "sdk60x32" goto sdk60x32
-if "%compiler_type%x%_arch_type%" == "sdk60x64" goto sdk60x64
-if "%compiler_type%x%_arch_type%" == "sdk70x32" goto sdk70x32
-if "%compiler_type%x%_arch_type%" == "sdk70x64" goto sdk70x64
-if "%compiler_type%x%_arch_type%" == "sdk71x32" goto sdk71x32
-if "%compiler_type%x%_arch_type%" == "sdk71x64" goto sdk71x64
+if "%_compiler_type%x%_arch_type%" == "msvc2010x32" goto msvc2010x32
+if "%_compiler_type%x%_arch_type%" == "msvc2010x64" goto msvc2010x64
+if "%_compiler_type%x%_arch_type%" == "msvc2008x32" goto msvc2008x32
+if "%_compiler_type%x%_arch_type%" == "msvc2008x64" goto msvc2008x64
+if "%_compiler_type%x%_arch_type%" == "mingwx32" goto mingwx32
+if "%_compiler_type%x%_arch_type%" == "mingwx64" goto mingwx64
+if "%_compiler_type%x%_arch_type%" == "sdk60x32" goto sdk60x32
+if "%_compiler_type%x%_arch_type%" == "sdk60x64" goto sdk60x64
+if "%_compiler_type%x%_arch_type%" == "sdk70x32" goto sdk70x32
+if "%_compiler_type%x%_arch_type%" == "sdk70x64" goto sdk70x64
+if "%_compiler_type%x%_arch_type%" == "sdk71x32" goto sdk71x32
+if "%_compiler_type%x%_arch_type%" == "sdk71x64" goto sdk71x64
 goto compilernotfound
 
 :msvc2010x64
@@ -521,7 +521,7 @@ set ProgramFiles32=
 set _work_folder=
 set _arch_type=
 
-set compiler_type=
+set _compiler_type=
 set _msvc2008=
 set _msvc2010=
 
