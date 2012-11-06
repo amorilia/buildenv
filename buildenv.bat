@@ -150,7 +150,7 @@ if "%SWITCH%" == "msvc2010" set _compiler_type=msvc2010
 
 if "%SWITCH%" == "python" set _python_path=%VALUE%
 
-if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
+if "%SWITCH%" == "blender" set _blender=%VALUE%
 
 if "%SWITCH%" == "git" set _git_path=%VALUE%
 if "%SWITCH%" == "nsis" set _nsis_path=%VALUE%
