@@ -54,7 +54,7 @@ rem *************
 
 if "%1" == "" (
 echo.Path to ini file(s)/folder not set;
-echo.Opening Readme.txt....
+echo.Opening README.rst.
 echo.
 echo.Please refer to this document for correct syntax and .ini file contents
 echo.before trying to execute the create-shortcuts.bat again.
