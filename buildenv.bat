@@ -21,12 +21,12 @@ if exist "%ProgramFiles32%\Microsoft Visual Studio 10.0\VC" set _msvc2010=%Progr
 if not "%_msvc2010%" == "" set _compiler_type=msvc2010
 
 rem langs
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.7\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.0\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\InstallPath" /ve 2^> nul') do set python_path=%%B
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve 2^> nul') do set python_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set _python_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve 2^> nul') do set _python_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.7\InstallPath" /ve 2^> nul') do set _python_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.0\InstallPath" /ve 2^> nul') do set _python_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.1\InstallPath" /ve 2^> nul') do set _python_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\3.2\InstallPath" /ve 2^> nul') do set _python_path=%%B
 
 rem programs
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir 2^> nul') do set _blender=%%B
@@ -84,7 +84,7 @@ echo.  arch=BITS               [default: %_arch_type%]
 
 rem Lang
 echo.Languages:
-echo.  python=FOLDER           [default: %python_path%]
+echo.  python=FOLDER           [default: %_python_path%]
 
 rem Progs
 echo.Programs:
@@ -148,7 +148,7 @@ if "%SWITCH%" == "msvc2008" set _compiler_type=msvc2008
 if "%SWITCH%" == "msvc2010" set _msvc2010=%VALUE%
 if "%SWITCH%" == "msvc2010" set _compiler_type=msvc2010
 
-if "%SWITCH%" == "python" set python_path=%VALUE%
+if "%SWITCH%" == "python" set _python_path=%VALUE%
 
 if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
 
@@ -322,14 +322,14 @@ rem **********
 :python
 echo.
 echo.Setting Python Environment
-if exist "%python_path%\python.exe" goto pythonfound
+if exist "%_python_path%\python.exe" goto pythonfound
 goto pythonnotfound
 
 :pythonfound
-set PATH=%python_path%;%python_path%\Scripts;%PATH%
+set PATH=%_python_path%;%_python_path%\Scripts;%PATH%
 rem PYTHONPATH has another purpose, so use PYTHONFOLDER
 rem http://docs.python.org/using/cmdline.html#envvar-PYTHONPATH
-set PYTHONFOLDER=%python_path%
+set PYTHONFOLDER=%_python_path%
 python -c "import sys; print(sys.version)"
 goto qt
 :endpythonfound
@@ -527,7 +527,7 @@ set _msvc2010=
 
 set _blender=
 
-set python_path=
+set _python_path=
 
 set git_path=
 set nsis_path=
