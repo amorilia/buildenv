@@ -110,10 +110,10 @@ echo.  msvc2010=FOLDER         [default: %_msvc2010%]
 
 rem libs
 echo.Libraries:
-echo.  swig=FOLDER             [default: %swig%]
+echo.  swig=FOLDER             [default: %_swig%]
 
-echo.  boostinc=FOLDER         [default: %boostinc%]
-echo.  boostlib=FOLDER         [default: %boostlib%]
+echo.  boostinc=FOLDER         [default: %BOOST_INCLUDEDIR%]
+echo.  boostlib=FOLDER         [default: %BOOST_LIBRARYDIR%]
 
 echo.  qt=FOLDER               [default: %_qt_path%]
 
@@ -536,8 +536,8 @@ set _cmake=
 
 set _qt_path=
 set _swig=
-set boostinc=
-set boostlib=
+set BOOST_INCLUDEDIR=
+set BOOST_LIBRARYDIR=
 
 set SWITCHPARSE=
 set SWITCH=
