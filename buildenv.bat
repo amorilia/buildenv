@@ -536,8 +536,8 @@ set _cmake=
 
 set _qt_path=
 set _swig=
-set BOOST_INCLUDEDIR=
-set BOOST_LIBRARYDIR=
+set _boostlib=
+set _boostinc=
 
 set SWITCHPARSE=
 set SWITCH=
