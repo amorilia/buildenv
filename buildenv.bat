@@ -159,10 +159,9 @@ if "%SWITCH%" == "seven_zip" set _seven_zip=%VALUE%
 
 if "%SWITCH%" == "qt" set _qt_path=%VALUE%
 if "%SWITCH%" == "swig" set _swig=%VALUE%
-if "%SWITCH%" == "boostinc" set BOOST_INCLUDEDIR=%VALUE%
+if "%SWITCH%" == "boostinc" set _boostinc=%VALUE%
 rem also add boostlib to path so dlls are found
-if "%SWITCH%" == "boostlib" set BOOST_LIBRARYDIR=%VALUE%
-if "%SWITCH%" == "boostlib" set PATH=%VALUE%;%PATH%
+if "%SWITCH%" == "boostlib" set _boostlib=%VALUE%
 goto eof
 
 :settings
@@ -313,6 +312,29 @@ if "%SWIGHOME%" == "" (
 echo.SWIG home: %SWIGHOME%
 set PATH=%SWIGHOME%;%PATH%
 :endswig
+
+rem *************
+rem *** BOOST ***
+rem *************
+
+:boost
+echo.
+echo.Setting BOOST Environment
+if exist "%_boostlib%\" set BOOST_LIBRARYDIR=%_boostlib%
+if "%BOOST_LIBRARYDIR%" == "" (
+  echo.BOOST_LIBRARYDIR not found
+  goto endboost
+)
+set PATH=%BOOST_LIBRARYDIR%;%PATH%
+
+if exist "%_boostinc%\" set BOOST_INCLUDEDIR=%_boostinc% 
+if "%BOOST_INCLUDEDIR%" == "" (
+  echo.BOOST_INCLUDEDIR not found
+  goto endboost
+)
+set PATH=%BOOST_INCLUDEDIR%;%PATH%
+
+:endboost
 
 rem **********
 rem *** Qt ***
