@@ -32,8 +32,8 @@ rem programs
 FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\BlenderFoundation" /v Install_Dir 2^> nul') do set _blender=%%B
 
 rem utilities
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
-FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set git_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set _git_path=%%B
+FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Git_is1" /v InstallLocation 2^> nul') do set _git_path=%%B
 
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Wow6432Node\Kitware\CMake 2.8.9" /ve 2^> nul') do set _cmake=%%B
@@ -92,7 +92,7 @@ echo.  blender=FOLDER          [default: %_blender%]
 
 rem Utilities
 echo.Utilities:
-echo.  git=FOLDER              [default: %git_path%]
+echo.  git=FOLDER              [default: %_git_path%]
 
 echo.  nsis=FOLDER             [default: %nsis_path%]
 
@@ -152,7 +152,7 @@ if "%SWITCH%" == "python" set _python_path=%VALUE%
 
 if "%SWITCH%" == "blender" set BLENDERHOME=%VALUE%
 
-if "%SWITCH%" == "git" set git_path=%VALUE%
+if "%SWITCH%" == "git" set _git_path=%VALUE%
 if "%SWITCH%" == "nsis" set nsis_path=%VALUE%
 if "%SWITCH%" == "cmake" set _cmake=%VALUE%
 if "%SWITCH%" == "seven_zip" set seven_zip=%VALUE%
@@ -271,7 +271,7 @@ if exist "%ProgramFiles%\Git\bin\git.exe" set GITHOME=%ProgramFiles%\Git
 if exist "%LOCALAPPDATA%\GitHub" (
   for /f "tokens=*" %%A in ('dir %LOCALAPPDATA%\GitHub\PortableGit_* /b') do set GITHOME=%LOCALAPPDATA%\GitHub\%%A
 )
-if exist "%git_path%\bin\git.exe" set GITHOME=%git_path%
+if exist "%_git_path%\bin\git.exe" set GITHOME=%_git_path%
 if "%GITHOME%" == "" (
   echo.Git not found
   goto endgit
@@ -529,7 +529,7 @@ set _blender=
 
 set _python_path=
 
-set git_path=
+set _git_path=
 set nsis_path=
 set seven_zip=
 set _cmake=
