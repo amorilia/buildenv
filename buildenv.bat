@@ -221,23 +221,23 @@ echo.Global Blender addons: %BLENDERADDONS%
 echo.Local Blender addons: %APPDATABLENDERADDONS%
 :endblender
 
-rem ****************
-rem *** Seven_zip ***
-rem ****************
+rem *************
+rem *** 7-Zip ***
+rem *************
 
-:seven_zip
+:sevenzip
 echo.
-echo.Setting seven_zip Environment
+echo.Setting 7-Zip Environment
 if exist "%ProgramFiles32%\7-zip\7z.exe" set SEVENZIPHOME=%ProgramFiles32%\7-zip
 if exist "%ProgramFiles%\7-zip\7z.exe" set SEVENZIPHOME=%ProgramFiles%\7-zip
 if exist "%_seven_zip%\7z.exe" set SEVENZIPHOME=%_seven_zip%
 if "%SEVENZIPHOME%" == "" (
-  echo.7-zip not found
-  goto endseven_zip
-  )
+  echo.7-Zip not found
+  goto endsevenzip
+)
 echo.7-Zip home: %SEVENZIPHOME%
 set PATH=%SEVENZIPHOME%;%PATH%
-:endseven_zip
+:endsevenzip
 
 
 rem ************
