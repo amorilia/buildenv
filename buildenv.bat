@@ -321,15 +321,14 @@ rem *************
 echo.
 echo.Setting BOOST Environment
 
-if exist "%_boostinc%\" set BOOST_INCLUDEDIR=%_boostinc% 
+if exist "%_boostinc%" set BOOST_INCLUDEDIR=%_boostinc% 
 if "%BOOST_INCLUDEDIR%" == "" (
   echo.BOOST Include Directory not found
   goto endboost
 )
-
 echo.BOOST Include Directory: %BOOST_INCLUDEDIR%
 
-if exist "%_boostlib%\" set BOOST_LIBRARYDIR=%_boostlib%
+if exist "%_boostlib%" set BOOST_LIBRARYDIR=%_boostlib%
 if "%BOOST_LIBRARYDIR%" == "" (
   echo.BOOST Library not found
   goto endboost
