@@ -22,7 +22,7 @@ goto createshortcut
 
 :checkoutfolder
 if exist "%HOMEDRIVE%%HOMEPATH%\Desktop" ( 
-set _shortcut_folder=%HOMEDRIVE%%HOMEPATH%\Desktop 
+set _shortcut_folder=%HOMEDRIVE%%HOMEPATH%\Desktop
 ) else (
 echo. Could not find default Desktop location
 goto error
