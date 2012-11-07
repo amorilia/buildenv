@@ -98,7 +98,7 @@ echo.  nsis=FOLDER             [default: %_nsis_path%]
 
 echo.  cmake=FOLDER            [default: %_cmake%]
 
-echo.  7-zip=FOLDER            [default: %_seven_zip%]
+echo.  seven_zip=FOLDER        [default: %_seven_zip%]
 
 rem compilers
 echo.Compilers:
