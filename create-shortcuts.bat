@@ -5,7 +5,7 @@ rem create-shortcuts.bat [ini source] [shortcut folder dest]
 
 :checkiniparam
 if exist "%1" (
-set _ini_location=%1 
+set _ini_location=%1
 ) else ( 
 set _ini_location=ini
 )
