@@ -34,7 +34,7 @@ goto createshortcut
 :createshortcut
 @for %%a in (%_ini_location%\*.ini) do shortcut.vbs "%_shortcut_folder%\%%~na.lnk" "%comspec%" "/k  %~dps0buildenv.bat %%~dfsa"
 echo.Shortcuts created.
-echo.INI files read from [folder: %_ini_location%]
+echo.Ini files read from [folder: %_ini_location%]
 echo.Shortcut written to [folder: %_shortcut_folder%]
 
 goto eof
