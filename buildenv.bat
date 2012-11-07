@@ -323,7 +323,7 @@ echo.Setting BOOST Environment
 
 if exist "%_boostinc%\" set BOOST_INCLUDEDIR=%_boostinc% 
 if "%BOOST_INCLUDEDIR%" == "" (
-  echo.BOOST_INCLUDEDIR not found
+  echo.BOOST Include Directory not found
   goto endboost
 )
 
@@ -331,7 +331,7 @@ echo.BOOST Include Directory: %BOOST_INCLUDEDIR%
 
 if exist "%_boostlib%\" set BOOST_LIBRARYDIR=%_boostlib%
 if "%BOOST_LIBRARYDIR%" == "" (
-  echo.BOOST_LIBRARYDIR not found
+  echo.BOOST Library not found
   goto endboost
 )
 set PATH=%BOOST_LIBRARYDIR%;%PATH%
