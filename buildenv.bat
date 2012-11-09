@@ -20,6 +20,12 @@ FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\VisualStudio\
 if exist "%ProgramFiles32%\Microsoft Visual Studio 10.0\VC" set _msvc2010=%ProgramFiles32%\Microsoft Visual Studio 10.0\VC
 if not "%_msvc2010%" == "" set _compiler_type=msvc2010
 
+rem MS_SDKs
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v6.0" /v InstallationFolder 2^> nul') do set _ms_sdk_six=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v6.0A" /v InstallationFolder 2^> nul') do set _ms_sdk_six=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.0" /v InstallationFolder 2^> nul') do set _ms_sdk_seven=%%B
+FOR /F "tokens=2*" %%A IN ('reg.exe QUERY "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.1" /v InstallationFolder 2^> nul') do set _ms_sdk_seven_One=%%B
+
 rem langs
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.5\InstallPath" /ve 2^> nul') do set _python_path=%%B
 FOR /F "tokens=2*" %%A in ('reg.exe QUERY "HKLM\SOFTWARE\Python\PythonCore\2.6\InstallPath" /ve 2^> nul') do set _python_path=%%B
@@ -107,6 +113,12 @@ echo.  compiler=COMPILER       [default: %_compiler_type%]
 echo.  msvc2008=FOLDER         [default: %_msvc2008%]
 
 echo.  msvc2010=FOLDER         [default: %_msvc2010%]
+
+rem ms_sdk
+echo.MS SDKs
+echo.  ms_sdk_6.0=FOLDER	   [default: %_ms_sdk_six%]
+echo.  ms_sdk_7.0=FOLDER	   [default: %_ms_sdk_seven%]
+echo.  ms_sdk_7.1=FOLDER	   [default: %_ms_sdk_seven_one%]
 
 rem libs
 echo.Libraries:
@@ -444,37 +456,37 @@ call "%_msvc2008%\bin\vcvars32.bat"
 goto python_msvc
 
 :sdk60x32
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin" goto compilernotfound
-set PATH="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin";%PATH% 
-set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\include";%INCLUDE%
-set LIB="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\lib";%LIB% 
+if not exist "%_ms_sdk_six%\vc\bin" goto compilernotfound
+set PATH="%_ms_sdk_six%\vc\bin";%PATH% 
+set INCLUDE="%_ms_sdk_six%\vc\include";%INCLUDE%
+set LIB="%_ms_sdk_six%\vc\lib";%LIB% 
 goto python_msvc
 
 :sdk60x64
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin\x64" goto compilernotfound
-set PATH="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\bin\x64";%PATH%
-set INCLUDE="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\include";%INCLUDE%
-set LIB="C:\Program Files\Microsoft SDKs\Windows\v6.0\vc\lib\x64";%LIB% 
+if not exist "%_ms_sdk_six%\vc\bin\x64" goto compilernotfound
+set PATH="%_ms_sdk_six%\vc\bin\x64";%PATH%
+set INCLUDE="%_ms_sdk_six%\vc\include";%INCLUDE%
+set LIB="%_ms_sdk_six%\vc\lib\x64";%LIB% 
 goto python_msvc
 
 :sdk70x32
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" goto compilernotfound
-call "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" /x86 /release /xp
+if not exist "%_ms_sdk_seven%\bin\SetEnv.cmd" goto compilernotfound
+call "%_ms_sdk_seven%\bin\SetEnv.cmd" /x86 /release /xp
 goto python_msvc
 
 :sdk70x64
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" goto compilernotfound
-call "C:\Program Files\Microsoft SDKs\Windows\v7.0\bin\SetEnv.cmd" /x64 /release /xp
+if not exist "%_ms_sdk_seven%\bin\SetEnv.cmd" goto compilernotfound
+call "%_ms_sdk_seven%\bin\SetEnv.cmd" /x64 /release /xp
 goto python_msvc
 
 :sdk71x32
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" goto compilernotfound
-call "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" /x86 /release /xp
+if not exist "%_ms_sdk_seven_one%\bin\SetEnv.cmd" goto compilernotfound
+call "%_ms_sdk_seven_one%\bin\SetEnv.cmd" /x86 /release /xp
 goto python_msvc
 
 :sdk71x64
-if not exist "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" goto compilernotfound
-call "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.cmd" /x64 /release /xp
+if not exist "%_ms_sdk_seven_one%\bin\SetEnv.cmd" goto compilernotfound
+call "%_ms_sdk_seven_one%\bin\SetEnv.cmd" /x64 /release /xp
 goto python_msvc
 
 :mingwx32
@@ -548,6 +560,10 @@ set _arch_type=
 set _compiler_type=
 set _msvc2008=
 set _msvc2010=
+
+set _ms_sdk_six=
+set _ms_sdk_seven=
+set _ms_sdk_seven_one=
 
 set _blender=
 
